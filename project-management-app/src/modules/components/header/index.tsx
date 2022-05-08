@@ -20,15 +20,15 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import './index.scss';
 
-const settings = ['Profile', 'Edit profile', 'Deleate profile', 'Logout'];
+const settings = ['Profile', 'Edit profile', 'Delete profile', 'Log out'];
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const [isRussianLanguage, setIsRussianLanguage] = useState(true);
+  const [isEnglishLanguage, setIsEnglishLanguage] = useState(true);
 
   const handleLanguageChange = () => {
-    setIsRussianLanguage((state) => !state);
+    setIsEnglishLanguage((state) => !state);
   };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -45,8 +45,6 @@ export const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  console.log(pathToPage.homePath);
 
   return (
     <AppBar
@@ -138,7 +136,7 @@ export const Header = () => {
             <input
               type="checkbox"
               className="language-switcher__checkbox"
-              checked={isRussianLanguage}
+              checked={isEnglishLanguage}
               onChange={handleLanguageChange}
             />
 
