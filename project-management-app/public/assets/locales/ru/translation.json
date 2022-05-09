@@ -6,5 +6,7 @@
   "editProfile": "Редактировать профиль",
   "deleteProfile": "Удалить профиль",
   "logOut": "Выйти",
+  "logIn": "Войти",
+  "signUp": "Регистрация",
   "createNewBoardHelperText": "Создать новую доску"
 }

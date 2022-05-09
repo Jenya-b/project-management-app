@@ -6,5 +6,7 @@
   "editProfile": "Edit profile",
   "deleteProfile": "Delete profile",
   "logOut": "Log out",
+  "logIn": "log in",
+  "signUp": "sign up",
   "createNewBoardHelperText": "Create new board"
 }

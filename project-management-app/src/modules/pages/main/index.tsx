@@ -5,9 +5,12 @@ import 'swiper/css/pagination';
 import { Autoplay, Pagination, EffectFade } from 'swiper';
 import './index.scss';
 import { PrimaryBtn } from '../../components/button/index';
-import { images } from '../../constants/constMain';
+import { buttonDescription, images } from '../../constants/constMain';
+import { useTranslation } from 'react-i18next';
 
 export const Main = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="container">
       <div className="title-container">
@@ -18,8 +21,9 @@ export const Main = () => {
         </h1>
       </div>
       <div className="btn-container">
-        <PrimaryBtn text="log in"></PrimaryBtn>
-        <PrimaryBtn text="sign up"></PrimaryBtn>
+        {buttonDescription.map((btnText) => (
+          <PrimaryBtn key={btnText} text={t(btnText)}></PrimaryBtn>
+        ))}
       </div>
       <Swiper
         spaceBetween={30}

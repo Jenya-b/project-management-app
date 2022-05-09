@@ -4,3 +4,5 @@ export const images = [
   'https://images.unsplash.com/photo-1448932155749-638e51b56f03',
   'https://images.unsplash.com/photo-1448932284983-0c7b152eba33',
 ];
+
+export const buttonDescription = ['logIn', 'signUp'];
