@@ -1,4 +1,10 @@
 {
   "homePage": "Home",
-  "projectPage": "Project"
+  "projectPage": "Project",
+  "search": "Search...",
+  "profile": "Profile",
+  "editProfile": "Edit profile",
+  "deleteProfile": "Delete profile",
+  "logOut": "Log out",
+  "createNewBoardHelperText": "Create new board"
 }

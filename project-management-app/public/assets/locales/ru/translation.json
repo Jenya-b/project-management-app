@@ -1,4 +1,10 @@
 {
   "homePage": "Главная",
-  "projectPage": "Проект"
+  "projectPage": "Проект",
+  "search": "Поиск...",
+  "profile": "Профиль",
+  "editProfile": "Редактировать профиль",
+  "deleteProfile": "Удалить профиль",
+  "logOut": "Выйти",
+  "createNewBoardHelperText": "Создать новую доску"
 }

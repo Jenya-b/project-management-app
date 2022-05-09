@@ -1,3 +1,3 @@
 export const navLinkTitle = ['homePage', 'projectPage'];
 
-export const settings = ['Profile', 'Edit profile', 'Delete profile', 'Log out'];
+export const settingsProfile = ['profile', 'editProfile', 'deleteProfile', 'logOut'];

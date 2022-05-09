@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { navLinkTitle, settings } from '../../constants/constHeader';
+import { navLinkTitle, settingsProfile } from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -124,7 +124,7 @@ export const Header = () => {
           ))}
         </Box>
         <Box sx={{ display: 'flex', columnGap: '1.5rem' }}>
-          <Tooltip title="Create new board">
+          <Tooltip title={t('createNewBoardHelperText')}>
             <IconButton size="large" aria-label="create new board">
               <AddIcon />
             </IconButton>
@@ -139,7 +139,7 @@ export const Header = () => {
           >
             <InputBase
               sx={{ ml: 1, flex: 1 }}
-              placeholder="Search..."
+              placeholder={t('search')}
               inputProps={{ 'aria-label': 'search' }}
             />
             <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
@@ -189,13 +189,13 @@ export const Header = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
+            {settingsProfile.map((setting) => (
               <MenuItem
                 key={setting}
                 onClick={handleCloseUserMenu}
                 sx={{ border: 'solid 2px rgba(0, 0, 0, .1)', borderTop: 'none' }}
               >
-                <Typography textAlign="center">{setting}</Typography>
+                <Typography textAlign="center">{t(setting)}</Typography>
               </MenuItem>
             ))}
           </Menu>
