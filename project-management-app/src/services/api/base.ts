@@ -1,6 +1,4 @@
-import settings from '../settings';
-
-const API_URL = settings.API_URL;
+import { API_URL } from '../settings';
 
 export interface ResponseError {
   error: {

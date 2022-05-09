@@ -91,11 +91,12 @@ class LoginPage extends React.Component<LoginPageProps, LoginPageState> {
   }
 
   render() {
-    const users = this.state.users.map((user) => <p key={user.id}>{user.name}</p>);
+    const { loading, users, name, login, password } = this.state;
+    const usersList = users.map((user) => <p key={user.id}>{user.name}</p>);
     return (
       <main className="main">
         <h1>Login</h1>
-        {this.state.loading ? (
+        {loading ? (
           <p>Loading...</p>
         ) : (
           <div>
@@ -106,7 +107,7 @@ class LoginPage extends React.Component<LoginPageProps, LoginPageState> {
                   className="login-form__field-input"
                   type="text"
                   name="name"
-                  value={this.state.name}
+                  value={name}
                   onChange={this.handleNameInputChange}
                 />
               </div>
@@ -116,7 +117,7 @@ class LoginPage extends React.Component<LoginPageProps, LoginPageState> {
                   className="login-form__field-input"
                   type="text"
                   name="login"
-                  value={this.state.login}
+                  value={login}
                   onChange={this.handleLoginInputChange}
                 />
               </div>
@@ -126,14 +127,14 @@ class LoginPage extends React.Component<LoginPageProps, LoginPageState> {
                   className="login-form__field-input"
                   type="password"
                   name="password"
-                  value={this.state.password}
+                  value={password}
                   onChange={this.handlePasswordInputChange}
                 />
               </div>
 
               <button>Signup</button>
             </form>
-            {users}
+            <div>{usersList}</div>
           </div>
         )}
       </main>
