@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { navLinkTitle } from '../../constants/constHeader';
+import { navLinkTitle, settings } from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -20,11 +20,9 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import './index.scss';
 
-const settings = ['Profile', 'Edit profile', 'Delete profile', 'Log out'];
-
 export const Header = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [isEnglishLanguage, setIsEnglishLanguage] = useState(true);
 
   const handleLanguageChange = () => {

@@ -16,7 +16,7 @@
       text-decoration: underline;
       text-decoration-color: $purple;
       text-decoration-thickness: 3px;
-      text-underline-offset: 29px;
+      text-underline-offset: 2.1rem;
       color: black;
     }
   }
@@ -24,8 +24,8 @@
   #language-switcher {
     position: relative;
     display: inline-block;
-    width: calc(#{$height} * 2);
-    height: $height;
+    width: calc(#{$switcherHeight} * 2);
+    height: $switcherHeight;
     transform: translateY(40%);
     transition: transform 0.17s $speed3;
 
@@ -38,19 +38,19 @@
     #select-ru,
     #select-en {
       position: absolute;
-      font-size: #{$height / 2.5};
-      top: #{$height / 4};
+      font-size: #{$switcherHeight / 2.5};
+      top: #{$switcherHeight / 4};
       color: #fff;
       mix-blend-mode: difference;
-      line-height: #{$height / 2};
+      line-height: #{$switcherHeight / 2};
     }
 
     #select-ru {
-      left: #{$height / 3.5};
+      left: #{$switcherHeight / 3.5};
     }
 
     #select-en {
-      right: #{$height / 4};
+      right: #{$switcherHeight / 4};
     }
   }
 
@@ -68,8 +68,8 @@
   #round-slider:before {
     position: absolute;
     content: '';
-    height: $height;
-    width: $height;
+    height: $switcherHeight;
+    width: $switcherHeight;
     left: 0;
     bottom: 0;
     background-color: white;
@@ -82,11 +82,11 @@
   }
 
   .language-switcher__checkbox:checked + #round-slider:before {
-    transform: translateX($height);
+    transform: translateX($switcherHeight);
   }
 
   #round-slider {
-    border-radius: $height;
+    border-radius: $switcherHeight;
   }
 
   #round-slider:before {

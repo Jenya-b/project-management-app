@@ -5,7 +5,7 @@
   justify-content: end;
   align-items: center;
   color: #000000;
-  border-top: solid 2px rgba(0, 0, 0, .1);
+  border-top: solid 2px rgba(0, 0, 0, 0.1);
   .footer__content {
     display: flex;
     width: calc(50% + 1.5rem);
@@ -16,7 +16,7 @@
   }
   .contacts {
     display: flex;
-    margin-right: 32px;
-    column-gap: 25px;
+    margin-right: 2.3rem;
+    column-gap: 1.8rem;
   }
 }
