@@ -4,14 +4,8 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
 import { Autoplay, Pagination, EffectFade } from 'swiper';
 import './index.scss';
-import { Btn } from '../../components/button/index';
-
-const images = [
-  'https://images.unsplash.com/photo-1493934558415-9d19f0b2b4d2',
-  'https://images.unsplash.com/photo-1518655048521-f130df041f66',
-  'https://images.unsplash.com/photo-1448932155749-638e51b56f03',
-  'https://images.unsplash.com/photo-1448932284983-0c7b152eba33',
-];
+import { PrimaryBtn } from '../../components/button/index';
+import { images } from '../../constants/constMain';
 
 export const Main = () => {
   return (
@@ -24,8 +18,8 @@ export const Main = () => {
         </h1>
       </div>
       <div className="btn-container">
-        <Btn text="log in" color="#3026b9" variant="contained"></Btn>
-        <Btn text="sign up" color="#3026b9" variant="contained"></Btn>
+        <PrimaryBtn text="log in"></PrimaryBtn>
+        <PrimaryBtn text="sign up"></PrimaryBtn>
       </div>
       <Swiper
         spaceBetween={30}

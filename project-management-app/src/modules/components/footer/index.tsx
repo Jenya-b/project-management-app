@@ -1,10 +1,5 @@
 import './index.scss';
-
-const links = [
-  'https://github.com/Jenya-b',
-  'https://github.com/Ckolobov',
-  'https://github.com/MilanaKard',
-];
+import { linksToGithub } from '../../constants/constFooter';
 
 export const Footer = () => {
   return (
@@ -12,7 +7,7 @@ export const Footer = () => {
       <div className="footer__content">
         <p className="footer__date">©2022</p>
         <ul className="contacts">
-          {links.map((link) => (
+          {linksToGithub.map((link) => (
             <li key={link}>
               <a className="contacts__link" href={link}>
                 {link.slice(link.lastIndexOf('/') + 1)}

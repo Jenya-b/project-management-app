@@ -1,13 +1,8 @@
 import { Button } from '@mui/material';
+import { PRIMARY_COLOR } from '../../constants/constGlobal';
 
-type BtnType = {
-  text: string;
-  color: string;
-  variant: 'contained' | 'text' | 'outlined';
-};
-
-export const Btn = ({ text, color, variant }: BtnType) => (
-  <Button variant={variant} sx={{ backgroundColor: color }}>
+export const PrimaryBtn = ({ text }: { text: string }) => (
+  <Button variant="contained" sx={{ backgroundColor: PRIMARY_COLOR }}>
     {text}
   </Button>
 );
