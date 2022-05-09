@@ -1,4 +1,4 @@
-import API, { ResponseError } from './base';
+import API from './base';
 
 interface SigninRequest {
   login: string;
@@ -7,7 +7,6 @@ interface SigninRequest {
 
 interface SigninResponse {
   token: string;
-  error?: ResponseError;
 }
 
 interface SignupRequest {
@@ -20,7 +19,6 @@ interface SignupResponse {
   id: string;
   login: string;
   name: string;
-  error?: ResponseError;
 }
 
 export const Authorization = {
