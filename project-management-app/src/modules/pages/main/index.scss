@@ -1,1 +1,57 @@
+.container {
+  position: relative;
 
+  .title-container {
+    position: absolute;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    font-size: 8em;
+    z-index: 10;
+    line-height: 1.5em;
+    @media (max-width: 1200px) {
+      font-size: 5em;
+    }
+    @media (max-width: 700px) {
+      font-size: 3em;
+    }
+  }
+
+  .btn-container {
+    display: flex;
+    column-gap: 2rem;
+    position: absolute;
+    z-index: 10;
+    right: 13rem;
+    top: 2.3rem;
+  }
+
+  .title {
+    margin-left: 3rem;
+  }
+
+  .slide {
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

@@ -1,8 +1,22 @@
 .footer {
-  height: 4rem;
-  background-color: #283036;
+  height: 5rem;
+  background-color: #ffffff;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
-  color: #ffffff;
+  color: #000000;
+  border-top: solid 2px rgba(0, 0, 0, 0.1);
+  .footer__content {
+    display: flex;
+    width: calc(50% + 1.5rem);
+    justify-content: space-between;
+  }
+  .footer__date {
+    width: 3rem;
+  }
+  .contacts {
+    display: flex;
+    margin-right: 2.3rem;
+    column-gap: 1.8rem;
+  }
 }

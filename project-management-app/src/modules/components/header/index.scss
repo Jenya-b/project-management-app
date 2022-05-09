@@ -1,16 +1,103 @@
+@import '../../../styles/variables';
+
 .header {
-  height: 7rem;
-  background-color: #283036;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  column-gap: 2rem;
-  a {
-    font-size: 1.3rem;
-    text-transform: uppercase;
-    color: #ffffff;
+  .header__link {
+    margin: 2rem;
+    display: block;
+    color: #52577e;
+    font-family: inherit;
+    text-transform: none;
+    font-size: 1.1rem;
+    transition: 0.3s;
+    &:hover {
+      color: black;
+    }
+    &.active {
+      text-decoration: underline;
+      text-decoration-color: $purple;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 2.1rem;
+      color: black;
+    }
   }
-  a.active {
-    color: rgb(152, 152, 236);
+
+  #language-switcher {
+    position: relative;
+    display: inline-block;
+    width: calc(#{$switcherHeight} * 2);
+    height: $switcherHeight;
+    transform: translateY(40%);
+    transition: transform 0.17s $speed3;
+
+    .language-switcher__checkbox {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    #select-ru,
+    #select-en {
+      position: absolute;
+      font-size: #{$switcherHeight / 2.5};
+      top: #{$switcherHeight / 4};
+      color: #fff;
+      mix-blend-mode: difference;
+      line-height: #{$switcherHeight / 2};
+    }
+
+    #select-ru {
+      left: #{$switcherHeight / 3.5};
+    }
+
+    #select-en {
+      right: #{$switcherHeight / 4};
+    }
   }
+
+  #round-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $purple;
+    transition: 0.4s;
+  }
+
+  #round-slider:before {
+    position: absolute;
+    content: '';
+    height: $switcherHeight;
+    width: $switcherHeight;
+    left: 0;
+    bottom: 0;
+    background-color: white;
+    border: solid 1px $purple;
+    transition: 0.4s;
+  }
+
+  .language-switcher__checkbox:checked + #round-slider {
+    background-color: $purple;
+  }
+
+  .language-switcher__checkbox:checked + #round-slider:before {
+    transform: translateX($switcherHeight);
+  }
+
+  #round-slider {
+    border-radius: $switcherHeight;
+  }
+
+  #round-slider:before {
+    border-radius: 50%;
+  }
+}
+
+#menu-appbar > * {
+  box-shadow: none;
+}
+
+.css-6hp17o-MuiList-root-MuiMenu-list {
+  padding: 0 !important;
 }
