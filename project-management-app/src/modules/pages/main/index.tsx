@@ -5,7 +5,7 @@ import 'swiper/css/pagination';
 import { Autoplay, Pagination, EffectFade } from 'swiper';
 import './index.scss';
 import { PrimaryBtn } from '../../components/button/index';
-import { buttonDescription, images } from '../../constants/constMain';
+import { buttonDescription, backgroundImages } from '../../constants/constMain';
 import { useTranslation } from 'react-i18next';
 
 export const Main = () => {
@@ -37,9 +37,8 @@ export const Main = () => {
           clickable: true,
         }}
         modules={[Autoplay, Pagination, EffectFade]}
-        className="mySwiper"
       >
-        {images.map((image) => (
+        {backgroundImages.map((image) => (
           <SwiperSlide key={image}>
             <div
               className="slide"
