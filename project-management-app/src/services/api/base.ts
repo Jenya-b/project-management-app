@@ -25,7 +25,7 @@ const API = {
           message: response.statusText,
         },
       };
-      Promise.reject(responseError);
+      return Promise.reject(responseError);
     }
     const content = await response.json();
     return content;
@@ -48,7 +48,7 @@ const API = {
           message: response.statusText,
         },
       };
-      Promise.reject(responseError);
+      return Promise.reject(responseError);
     }
     const content = await response.json();
     return content;
