@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { navLinkTitle, settings } from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
   AppBar,
   Avatar,
   Box,
-  FormLabel,
   IconButton,
   InputBase,
   Menu,
@@ -19,14 +20,29 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import './index.scss';
+import { useAppDispatch } from '../../../hooks/useAppDispatch';
+import { useAppSelector } from '../../../hooks/useAppSelector';
+import { langInterfaceSlice } from '../../../store/reducers/langInterfaceSlice';
+import { defaultLanguage, languagesArray } from '../../constants/constUtils';
+import { useTranslation } from 'react-i18next';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [isEnglishLanguage, setIsEnglishLanguage] = useState(true);
+  const dispatch = useAppDispatch();
+  const { language } = useAppSelector((state) => state.langInterfaceReducer);
+  const { setLanguage } = langInterfaceSlice.actions;
+  const { t, i18n } = useTranslation();
 
-  const handleLanguageChange = () => {
-    setIsEnglishLanguage((state) => !state);
+  useEffect(() => {
+    const lang = localStorage.getItem('i18nextLng');
+    dispatch(setLanguage(lang ?? defaultLanguage));
+  }, []);
+
+  const handleLanguageChange = (event: SelectChangeEvent) => {
+    const { value } = event.target;
+    dispatch(setLanguage(value));
+    i18n.changeLanguage(value);
   };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -82,13 +98,13 @@ export const Header = () => {
             onClose={handleCloseNavMenu}
             sx={{ mt: '8px', display: { xs: 'block', md: 'none' } }}
           >
-            {Object.entries(navLinkTitle).map(([key, value]) => (
-              <NavLink key={value} to={pathToPage[`${key.slice(0, -2)}th`]}>
+            {navLinkTitle.map((title) => (
+              <NavLink key={title} to={pathToPage[`${title.slice(0, -2)}th`]}>
                 <MenuItem
                   onClick={handleCloseNavMenu}
                   sx={{ border: 'solid 2px rgba(0, 0, 0, .1)', borderTop: 'none' }}
                 >
-                  <Typography textAlign="center">{value}</Typography>
+                  <Typography textAlign="center">{title}</Typography>
                 </MenuItem>
               </NavLink>
             ))}
@@ -96,14 +112,14 @@ export const Header = () => {
         </Box>
 
         <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
-          {Object.entries(navLinkTitle).map(([key, value]) => (
+          {navLinkTitle.map((title) => (
             <NavLink
-              key={value}
-              to={pathToPage[`${key.slice(0, -2)}th`]}
+              key={title}
+              to={pathToPage[`${title.slice(0, -2)}th`]}
               className="header__link"
               onClick={handleCloseNavMenu}
             >
-              {value}
+              {t(title)}
             </NavLink>
           ))}
         </Box>
@@ -130,18 +146,6 @@ export const Header = () => {
               <SearchIcon />
             </IconButton>
           </Box>
-          <FormLabel id="language-switcher">
-            <input
-              type="checkbox"
-              className="language-switcher__checkbox"
-              checked={isEnglishLanguage}
-              onChange={handleLanguageChange}
-            />
-
-            <span id="round-slider"></span>
-            <span id="select-ru">RU</span>
-            <span id="select-en">EN</span>
-          </FormLabel>
           <IconButton
             onClick={handleOpenUserMenu}
             sx={{
@@ -195,6 +199,19 @@ export const Header = () => {
               </MenuItem>
             ))}
           </Menu>
+          <FormControl variant="standard" className="multiple-language">
+            <Select
+              value={language}
+              className="multiple-language__select"
+              onChange={handleLanguageChange}
+            >
+              {languagesArray.map((language) => (
+                <MenuItem key={language} value={language}>
+                  {language}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
       </Toolbar>
     </AppBar>
