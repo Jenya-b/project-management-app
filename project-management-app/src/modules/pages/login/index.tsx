@@ -1,7 +1,7 @@
 import './index.scss';
 import React from 'react';
-import { Authorization } from '../../../services/api/authorization';
-import { Users, UserData } from '../../../services/api/users';
+import { Authorization } from '../../../utils/api/authorization';
+import { Users, UserData } from '../../../utils/api/users';
 
 type LoginPageProps = Record<string, never>;
 
