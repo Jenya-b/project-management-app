@@ -6,49 +6,44 @@ import { Autoplay, Pagination, EffectFade } from 'swiper';
 import './index.scss';
 import { PrimaryBtn } from '../../components/button/index';
 import { buttonDescription, backgroundImages } from '../../constants/constMain';
-import { useTranslation } from 'react-i18next';
 
-export const Main = () => {
-  const { t } = useTranslation();
-
-  return (
-    <div className="container">
-      <div className="title-container">
-        <h1 className="title">
-          Project <br />
-          Management
-          <br /> &emsp;&emsp;&emsp;&nbsp;&nbsp;App
-        </h1>
-      </div>
-      <div className="btn-container">
-        {buttonDescription.map((btnText) => (
-          <PrimaryBtn key={btnText} text={t(btnText)} />
-        ))}
-      </div>
-      <Swiper
-        spaceBetween={30}
-        effect={'fade'}
-        centeredSlides={true}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[Autoplay, Pagination, EffectFade]}
-      >
-        {backgroundImages.map((image) => (
-          <SwiperSlide key={image}>
-            <div
-              className="slide"
-              style={{
-                backgroundImage: `url("${image}")`,
-              }}
-            ></div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+export const Main = () => (
+  <div className="container">
+    <div className="title-container">
+      <h1 className="title">
+        Project <br />
+        Management
+        <br /> &emsp;&emsp;&emsp;&nbsp;&nbsp;App
+      </h1>
     </div>
-  );
-};
+    <div className="btn-container">
+      {buttonDescription.map((btnText) => (
+        <PrimaryBtn key={btnText} variant="contained" text={btnText} />
+      ))}
+    </div>
+    <Swiper
+      spaceBetween={30}
+      effect={'fade'}
+      centeredSlides={true}
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+      }}
+      pagination={{
+        clickable: true,
+      }}
+      modules={[Autoplay, Pagination, EffectFade]}
+    >
+      {backgroundImages.map((image) => (
+        <SwiperSlide key={image}>
+          <div
+            className="slide"
+            style={{
+              backgroundImage: `url("${image}")`,
+            }}
+          ></div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  </div>
+);

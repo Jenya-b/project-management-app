@@ -10,3 +10,8 @@ export type RoutesTypeProps = {
   homePath: string;
   projectPath: string;
 };
+
+export type ButtonType = {
+  variant: 'text' | 'outlined' | 'contained' | undefined;
+  text: string;
+};
