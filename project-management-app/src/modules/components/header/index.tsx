@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { navLinkTitle, settings } from '../../constants/constHeader';
+import { navLinkTitle, settingsProfile } from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -19,14 +19,26 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import './index.scss';
+import { useAppDispatch } from '../../../hooks/useAppDispatch';
+import { langInterfaceSlice } from '../../../store/reducers/langInterfaceSlice';
+import { useTranslation } from 'react-i18next';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [isEnglishLanguage, setIsEnglishLanguage] = useState(true);
+  const dispatch = useAppDispatch();
+  const { setLanguage } = langInterfaceSlice.actions;
+  const { t, i18n } = useTranslation();
 
-  const handleLanguageChange = () => {
-    setIsEnglishLanguage((state) => !state);
+  useEffect(() => {
+    dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
+    i18n.changeLanguage(isEnglishLanguage ? 'en' : 'ru');
+  }, [isEnglishLanguage]);
+
+  const handleLanguageChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const { checked } = event.currentTarget;
+    setIsEnglishLanguage(checked);
   };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -82,13 +94,13 @@ export const Header = () => {
             onClose={handleCloseNavMenu}
             sx={{ mt: '8px', display: { xs: 'block', md: 'none' } }}
           >
-            {Object.entries(navLinkTitle).map(([key, value]) => (
-              <NavLink key={value} to={pathToPage[`${key.slice(0, -2)}th`]}>
+            {navLinkTitle.map((title) => (
+              <NavLink key={title} to={pathToPage[`${title.slice(0, -2)}th`]}>
                 <MenuItem
                   onClick={handleCloseNavMenu}
                   sx={{ border: 'solid 2px rgba(0, 0, 0, .1)', borderTop: 'none' }}
                 >
-                  <Typography textAlign="center">{value}</Typography>
+                  <Typography textAlign="center">{title}</Typography>
                 </MenuItem>
               </NavLink>
             ))}
@@ -96,19 +108,19 @@ export const Header = () => {
         </Box>
 
         <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
-          {Object.entries(navLinkTitle).map(([key, value]) => (
+          {navLinkTitle.map((title) => (
             <NavLink
-              key={value}
-              to={pathToPage[`${key.slice(0, -2)}th`]}
+              key={title}
+              to={pathToPage[`${title.slice(0, -2)}th`]}
               className="header__link"
               onClick={handleCloseNavMenu}
             >
-              {value}
+              {t(title)}
             </NavLink>
           ))}
         </Box>
         <Box sx={{ display: 'flex', columnGap: '1.5rem' }}>
-          <Tooltip title="Create new board">
+          <Tooltip title={t('createNewBoardHelperText')}>
             <IconButton size="large" aria-label="create new board">
               <AddIcon />
             </IconButton>
@@ -123,7 +135,7 @@ export const Header = () => {
           >
             <InputBase
               sx={{ ml: 1, flex: 1 }}
-              placeholder="Search..."
+              placeholder={t('search')}
               inputProps={{ 'aria-label': 'search' }}
             />
             <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
@@ -185,13 +197,13 @@ export const Header = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
+            {settingsProfile.map((setting) => (
               <MenuItem
                 key={setting}
                 onClick={handleCloseUserMenu}
                 sx={{ border: 'solid 2px rgba(0, 0, 0, .1)', borderTop: 'none' }}
               >
-                <Typography textAlign="center">{setting}</Typography>
+                <Typography textAlign="center">{t(setting)}</Typography>
               </MenuItem>
             ))}
           </Menu>
