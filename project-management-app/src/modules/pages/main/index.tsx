@@ -22,7 +22,7 @@ export const Main = () => {
       </div>
       <div className="btn-container">
         {buttonDescription.map((btnText) => (
-          <PrimaryBtn key={btnText} text={t(btnText)}></PrimaryBtn>
+          <PrimaryBtn key={btnText} text={t(btnText)} />
         ))}
       </div>
       <Swiper
