@@ -15,3 +15,11 @@ export type ButtonType = {
   variant: 'text' | 'outlined' | 'contained' | undefined;
   text: string;
 };
+
+export type ConfirmationDialogType = {
+  isActive: boolean;
+  title: string;
+  desc: string;
+  closeWindow: () => void;
+  confirmAction: () => void;
+};

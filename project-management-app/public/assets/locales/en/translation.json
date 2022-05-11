@@ -8,5 +8,7 @@
   "logOut": "Log out",
   "logIn": "log in",
   "signUp": "sign up",
-  "createNewBoardHelperText": "Create new board"
+  "createNewBoardHelperText": "Create new board",
+  "btnDialogOk": "OK",
+  "btnDialogCancel": "Cancel"
 }

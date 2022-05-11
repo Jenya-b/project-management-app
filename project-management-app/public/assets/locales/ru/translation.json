@@ -8,5 +8,7 @@
   "logOut": "Выйти",
   "logIn": "Войти",
   "signUp": "Регистрация",
-  "createNewBoardHelperText": "Создать новую доску"
+  "createNewBoardHelperText": "Создать новую доску",
+  "btnDialogOk": "Подтвердить",
+  "btnDialogCancel": "Отменить"
 }
