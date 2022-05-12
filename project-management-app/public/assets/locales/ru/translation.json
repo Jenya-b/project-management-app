@@ -10,5 +10,7 @@
   "signUp": "Регистрация",
   "createNewBoardHelperText": "Создать новую доску",
   "btnDialogOk": "Подтвердить",
-  "btnDialogCancel": "Отменить"
+  "btnDialogCancel": "Отменить",
+  "titleModal": "Подтверждение",
+  "deleteProfileModal": "Вы действительно хотите удалить учетную запись?"
 }

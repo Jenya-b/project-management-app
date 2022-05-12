@@ -10,5 +10,7 @@
   "signUp": "sign up",
   "createNewBoardHelperText": "Create new board",
   "btnDialogOk": "OK",
-  "btnDialogCancel": "Cancel"
+  "btnDialogCancel": "Cancel",
+  "titleModal": "Confirmation",
+  "deleteProfileModal": "Are you sure you want to delete your account?"
 }
