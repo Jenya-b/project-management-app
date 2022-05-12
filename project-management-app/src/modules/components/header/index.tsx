@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import {
   DELETE_PROFILE,
   DEL_PROFILE_TEXT,
+  LOG_OUT,
+  LOG_OUT_TEXT,
   navLinkTitle,
   settingsProfile,
 } from '../../constants/constHeader';
@@ -75,6 +77,9 @@ export const Header = () => {
       case DEL_PROFILE_TEXT:
         deleteProfile();
         break;
+      case LOG_OUT_TEXT:
+        signOut();
+        break;
     }
     closeConfirmationDialog();
     setTimeout(() => dispatch(setInfoDialog('')), 500);
@@ -86,11 +91,17 @@ export const Header = () => {
         dispatch(setInfoDialog(DEL_PROFILE_TEXT));
         dispatch(seDialogActivity(true));
         break;
+      case LOG_OUT:
+        dispatch(setInfoDialog(LOG_OUT_TEXT));
+        dispatch(seDialogActivity(true));
+        break;
     }
     handleCloseUserMenu();
   };
 
   const deleteProfile = () => {};
+
+  const signOut = () => {};
 
   return (
     <>

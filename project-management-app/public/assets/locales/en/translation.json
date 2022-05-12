@@ -12,5 +12,6 @@
   "btnDialogOk": "OK",
   "btnDialogCancel": "Cancel",
   "titleModal": "Confirmation",
-  "deleteProfileModal": "Are you sure you want to delete your account?"
+  "deleteProfileModal": "Are you sure you want to delete your account?",
+  "logOutModal": "Are you sure you want to log out of your account?"
 }
