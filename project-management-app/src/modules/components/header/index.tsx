@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { navLinkTitle, settingsProfile } from '../../constants/constHeader';
+import {
+  DELETE_PROFILE,
+  DEL_PROFILE_TEXT,
+  navLinkTitle,
+  settingsProfile,
+} from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -23,7 +28,7 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { langInterfaceSlice } from '../../../store/reducers/langInterfaceSlice';
 import { useTranslation } from 'react-i18next';
 import { ConfirmationDialog } from '../confirmationDialog';
-import { modalWindowSlice } from '../../../store/reducers/modalWindowSlice';
+import { confirmationDialogSlice } from '../../../store/reducers/confirmationDialogSlice';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 
 export const Header = () => {
@@ -31,9 +36,9 @@ export const Header = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [isEnglishLanguage, setIsEnglishLanguage] = useState(true);
   const dispatch = useAppDispatch();
-  const { isModalWindowActive, infoModal } = useAppSelector((state) => state.modalWindowReducer);
+  const { isDialogActive, infoDialog } = useAppSelector((state) => state.confirmationDialog);
   const { setLanguage } = langInterfaceSlice.actions;
-  const { setModalWindowActivity, setInfoModal } = modalWindowSlice.actions;
+  const { seDialogActivity, setInfoDialog } = confirmationDialogSlice.actions;
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -62,24 +67,24 @@ export const Header = () => {
   };
 
   const closeConfirmationDialog = () => {
-    dispatch(setModalWindowActivity(false));
+    dispatch(seDialogActivity(false));
   };
 
   const confirmAction = () => {
-    switch (infoModal) {
-      case 'deleteProfileModal':
+    switch (infoDialog) {
+      case DEL_PROFILE_TEXT:
         deleteProfile();
         break;
     }
     closeConfirmationDialog();
-    dispatch(setInfoModal(''));
+    setTimeout(() => dispatch(setInfoDialog('')), 500);
   };
 
   const clickMenuItem = (item: string) => {
     switch (item) {
-      case 'deleteProfile':
-        dispatch(setInfoModal('deleteProfileModal'));
-        dispatch(setModalWindowActivity(true));
+      case DELETE_PROFILE:
+        dispatch(setInfoDialog(DEL_PROFILE_TEXT));
+        dispatch(seDialogActivity(true));
         break;
     }
     handleCloseUserMenu();
@@ -243,11 +248,11 @@ export const Header = () => {
         </Toolbar>
       </AppBar>
       <ConfirmationDialog
-        isActive={isModalWindowActive}
+        isActive={isDialogActive}
         closeWindow={closeConfirmationDialog}
         confirmAction={confirmAction}
         title={'titleModal'}
-        desc={infoModal}
+        desc={infoDialog}
       />
     </>
   );
