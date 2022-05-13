@@ -148,7 +148,7 @@ export const Header = () => {
                     onClick={handleCloseNavMenu}
                     sx={{ border: 'solid 2px rgba(0, 0, 0, .1)', borderTop: 'none' }}
                   >
-                    <Typography textAlign="center">{title}</Typography>
+                    <Typography textAlign="center">{t(title)}</Typography>
                   </MenuItem>
                 </NavLink>
               ))}
