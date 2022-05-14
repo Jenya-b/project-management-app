@@ -3,7 +3,7 @@ import { Layout } from './modules/components/Layout';
 import { pathToPage } from './modules/constants/constRoutes';
 import { Main } from './modules/pages/main';
 import { Project } from './modules/pages/project';
-import Login from './modules/pages/login';
+import { Login } from './modules/pages/login';
 
 export const App = () => {
   const { homePath, projectPath, loginPath } = pathToPage;
