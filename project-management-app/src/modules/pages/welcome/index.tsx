@@ -7,7 +7,7 @@ import './index.scss';
 import { PrimaryBtn } from '../../components/button/index';
 import { buttonDescription, backgroundImages } from '../../constants/constMain';
 
-export const Main = () => {
+export const Welcome = () => {
   const handleClick = () => {};
 
   return (
