@@ -15,6 +15,9 @@ import {
   AppBar,
   Avatar,
   Box,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormLabel,
   IconButton,
   InputBase,
@@ -32,6 +35,7 @@ import { useTranslation } from 'react-i18next';
 import { ConfirmationDialog } from '../confirmationDialog';
 import { confirmationDialogSlice } from '../../../store/reducers/confirmationDialogSlice';
 import { useAppSelector } from '../../../hooks/useAppSelector';
+import { BasicModal } from '../modal';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -258,13 +262,13 @@ export const Header = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      <ConfirmationDialog
+      <BasicModal
         isActive={isDialogActive}
         closeWindow={closeConfirmationDialog}
         confirmAction={confirmAction}
-        title={'titleModal'}
-        desc={infoDialog}
-      />
+      >
+        <ConfirmationDialog title="titleModal" desc={infoDialog} />
+      </BasicModal>
     </>
   );
 };
