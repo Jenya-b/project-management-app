@@ -41,10 +41,11 @@ export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [isEnglishLanguage, setIsEnglishLanguage] = useState(true);
+  const [infoDialog, setInfoDialog] = useState('');
   const dispatch = useAppDispatch();
-  const { isDialogActive, infoDialog } = useAppSelector((state) => state.confirmationDialog);
+  const { isModalActive } = useAppSelector((state) => state.confirmationDialog);
   const { setLanguage } = langInterfaceSlice.actions;
-  const { setDialogActivity, setInfoDialog } = confirmationDialogSlice.actions;
+  const { setDialogActivity } = confirmationDialogSlice.actions;
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -86,17 +87,17 @@ export const Header = () => {
         break;
     }
     closeConfirmationDialog();
-    setTimeout(() => dispatch(setInfoDialog('')), 500);
+    setTimeout(() => setInfoDialog(''), 500);
   };
 
   const clickMenuItem = (item: string) => {
     switch (item) {
       case DELETE_PROFILE:
-        dispatch(setInfoDialog(DEL_PROFILE_TEXT));
+        setInfoDialog(DEL_PROFILE_TEXT);
         dispatch(setDialogActivity(true));
         break;
       case LOG_OUT:
-        dispatch(setInfoDialog(LOG_OUT_TEXT));
+        setInfoDialog(LOG_OUT_TEXT);
         dispatch(setDialogActivity(true));
         break;
     }
@@ -263,7 +264,7 @@ export const Header = () => {
         </Toolbar>
       </AppBar>
       <BasicModal
-        isActive={isDialogActive}
+        isActive={isModalActive}
         closeWindow={closeConfirmationDialog}
         confirmAction={confirmAction}
       >

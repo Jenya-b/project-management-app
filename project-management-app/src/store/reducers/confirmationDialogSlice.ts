@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-  isDialogActive: false,
-  infoDialog: '',
+  isModalActive: false,
 };
 
 export const confirmationDialogSlice = createSlice({
@@ -10,10 +9,7 @@ export const confirmationDialogSlice = createSlice({
   initialState,
   reducers: {
     setDialogActivity(state, action: PayloadAction<boolean>) {
-      state.isDialogActive = action.payload;
-    },
-    setInfoDialog(state, action: PayloadAction<string>) {
-      state.infoDialog = action.payload;
+      state.isModalActive = action.payload;
     },
   },
 });
