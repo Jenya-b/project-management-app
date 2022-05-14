@@ -14,4 +14,17 @@ export type RoutesTypeProps = {
 export type ButtonType = {
   variant: 'text' | 'outlined' | 'contained' | undefined;
   text: string;
+  onClick?: () => void;
+};
+
+export type BasicModalType = {
+  isActive: boolean;
+  closeWindow: () => void;
+  confirmAction: () => void;
+  children: JSX.Element;
+};
+
+export type ConfirmationDialogType = {
+  title: string;
+  desc: string;
 };

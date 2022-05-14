@@ -9,6 +9,11 @@
   "logIn": "log in",
   "signUp": "sign up",
   "createNewBoardHelperText": "Create new board",
+  "btnDialogOk": "OK",
+  "btnDialogCancel": "Cancel",
+  "titleModal": "Confirmation",
+  "deleteProfileModal": "Are you sure you want to delete your account?",
+  "logOutModal": "Are you sure you want to log out of your account?",
   "notFoundTitle": "404 Not Found",
   "notFoundDesc": "Something seems to have gone wrong! The page you are requesting does not exist. Perhaps it is out of date, has been removed, or an incorrect address has been entered in the address bar.",
   "notFoundButton": "Home Page"
