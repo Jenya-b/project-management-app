@@ -40,7 +40,7 @@ export const Header = () => {
   const dispatch = useAppDispatch();
   const { isDialogActive, infoDialog } = useAppSelector((state) => state.confirmationDialog);
   const { setLanguage } = langInterfaceSlice.actions;
-  const { seDialogActivity, setInfoDialog } = confirmationDialogSlice.actions;
+  const { setDialogActivity, setInfoDialog } = confirmationDialogSlice.actions;
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export const Header = () => {
   };
 
   const closeConfirmationDialog = () => {
-    dispatch(seDialogActivity(false));
+    dispatch(setDialogActivity(false));
   };
 
   const confirmAction = () => {
@@ -89,11 +89,11 @@ export const Header = () => {
     switch (item) {
       case DELETE_PROFILE:
         dispatch(setInfoDialog(DEL_PROFILE_TEXT));
-        dispatch(seDialogActivity(true));
+        dispatch(setDialogActivity(true));
         break;
       case LOG_OUT:
         dispatch(setInfoDialog(LOG_OUT_TEXT));
-        dispatch(seDialogActivity(true));
+        dispatch(setDialogActivity(true));
         break;
     }
     handleCloseUserMenu();

@@ -9,7 +9,7 @@ export const confirmationDialogSlice = createSlice({
   name: 'confirmationDialog',
   initialState,
   reducers: {
-    seDialogActivity(state, action: PayloadAction<boolean>) {
+    setDialogActivity(state, action: PayloadAction<boolean>) {
       state.isDialogActive = action.payload;
     },
     setInfoDialog(state, action: PayloadAction<string>) {
