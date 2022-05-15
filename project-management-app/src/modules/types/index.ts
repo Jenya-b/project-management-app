@@ -28,3 +28,9 @@ export type ConfirmationDialogType = {
   title: string;
   desc: string;
 };
+
+export type ListItemProjectType = {
+  title: string;
+  deleteBoard: () => void;
+  openBoard: () => void;
+};
