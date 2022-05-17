@@ -48,7 +48,7 @@ export const Header = () => {
   useEffect(() => {
     dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
     i18n.changeLanguage(isEnglishLanguage ? 'en' : 'ru');
-  }, [isEnglishLanguage]);
+  }, [dispatch, i18n, isEnglishLanguage, setLanguage]);
 
   const handleLanguageChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { checked } = event.currentTarget;

@@ -1,14 +1,7 @@
 import { API_URL } from '../settings';
 
-export interface ResponseError {
-  error: {
-    code?: number;
-    message: string;
-  };
-}
-
 const API = {
-  get: async <T>(request: string, token: string): Promise<T> => {
+  get: async (request: string, token: string): Promise<Response> => {
     const response = await fetch(`${API_URL}/${request}`, {
       method: 'GET',
       headers: {
@@ -16,19 +9,9 @@ const API = {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (!response.ok) {
-      const responseError: ResponseError = {
-        error: {
-          code: response.status,
-          message: response.statusText,
-        },
-      };
-      return Promise.reject(responseError);
-    }
-    const content = await response.json();
-    return content;
+    return response;
   },
-  post: async <D, T>(request: string, data: D, token: string): Promise<T> => {
+  post: async <D>(request: string, data: D, token: string): Promise<Response> => {
     const init = {
       method: 'POST',
       headers: {
@@ -39,17 +22,7 @@ const API = {
       body: JSON.stringify(data),
     };
     const response = await fetch(`${API_URL}/${request}`, init);
-    if (!response.ok) {
-      const responseError: ResponseError = {
-        error: {
-          code: response.status,
-          message: response.statusText,
-        },
-      };
-      return Promise.reject(responseError);
-    }
-    const content = await response.json();
-    return content;
+    return response;
   },
 };
 
