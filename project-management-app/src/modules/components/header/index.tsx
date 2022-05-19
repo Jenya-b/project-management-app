@@ -7,6 +7,7 @@ import {
   LOG_OUT_TEXT,
   navLinkTitle,
   settingsProfile,
+  NEW_PROJECT,
 } from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
@@ -20,6 +21,7 @@ import {
   InputBase,
   Menu,
   MenuItem,
+  TextField,
   Toolbar,
   Tooltip,
   Typography,
@@ -33,12 +35,14 @@ import { ConfirmationDialog } from '../confirmationDialog';
 import { confirmationDialogSlice } from '../../../store/reducers/confirmationDialogSlice';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { BasicModal } from '../modal';
+import { Boards } from '../../../utils/api/boards/boards';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [isEnglishLanguage, setIsEnglishLanguage] = useState(true);
-  const [infoDialog, setInfoDialog] = useState('');
+  const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(true);
+  const [infoDialog, setInfoDialog] = useState<string>('');
+  const [newProjectTitle, setNewProjectTitle] = useState<string>('');
   const dispatch = useAppDispatch();
   const { isModalActive } = useAppSelector((state) => state.confirmationDialog);
   const { setLanguage } = langInterfaceSlice.actions;
@@ -62,6 +66,11 @@ export const Header = () => {
     setAnchorElUser(event.currentTarget);
   };
 
+  const handleProjectTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setNewProjectTitle(value);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -82,6 +91,9 @@ export const Header = () => {
       case LOG_OUT_TEXT:
         signOut();
         break;
+      case NEW_PROJECT:
+        addNewProject();
+        break;
     }
     closeConfirmationDialog();
     setTimeout(() => setInfoDialog(''), 500);
@@ -97,6 +109,10 @@ export const Header = () => {
         setInfoDialog(LOG_OUT_TEXT);
         dispatch(setDialogActivity(true));
         break;
+      case NEW_PROJECT:
+        setInfoDialog(NEW_PROJECT);
+        dispatch(setDialogActivity(true));
+        break;
     }
     handleCloseUserMenu();
   };
@@ -104,6 +120,16 @@ export const Header = () => {
   const deleteProfile = () => {};
 
   const signOut = () => {};
+
+  const addNewProject = async () => {
+    console.log(newProjectTitle);
+
+    const token = localStorage.getItem('user_token');
+
+    if (token) {
+      await Boards.createBoard({ title: newProjectTitle }, token);
+    }
+  };
 
   return (
     <>
@@ -171,7 +197,11 @@ export const Header = () => {
           </Box>
           <Box sx={{ display: 'flex', columnGap: '1.5rem' }}>
             <Tooltip title={t('createNewBoardHelperText')}>
-              <IconButton size="large" aria-label="create new board">
+              <IconButton
+                onClick={() => clickMenuItem(NEW_PROJECT)}
+                size="large"
+                aria-label="create new board"
+              >
                 <AddIcon />
               </IconButton>
             </Tooltip>
@@ -265,7 +295,21 @@ export const Header = () => {
         closeWindow={closeConfirmationDialog}
         confirmAction={confirmAction}
       >
-        <ConfirmationDialog title="titleModal" desc={infoDialog} />
+        {infoDialog === NEW_PROJECT ? (
+          <>
+            <Typography variant="h6" component="h2">
+              {t('newProjectTypography')}
+            </Typography>
+            <TextField
+              placeholder={t('projectName')}
+              sx={{ marginBottom: 4, marginTop: 4 }}
+              value={newProjectTitle}
+              onChange={handleProjectTitleChange}
+            />
+          </>
+        ) : (
+          <ConfirmationDialog title="titleModal" desc={infoDialog} />
+        )}
       </BasicModal>
     </>
   );
