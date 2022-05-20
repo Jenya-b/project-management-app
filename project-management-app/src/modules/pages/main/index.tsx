@@ -5,9 +5,23 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ListItemProject } from '../../components/listItemProject';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '../../../hooks/useAppSelector';
+import { useAppDispatch } from '../../../hooks/useAppDispatch';
+import { useEffect } from 'react';
+import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 
 export const Main = () => {
   const { t } = useTranslation();
+  const { projects } = useAppSelector((state) => state.projectsReducer);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const getProjects = async () => {
+      dispatch(fetchProjects());
+    };
+
+    getProjects().catch(console.error);
+  }, []);
 
   const openBoard = () => {};
 
@@ -23,10 +37,10 @@ export const Main = () => {
             </Typography>
             <Box>
               <List>
-                {Array.from(Array(6)).map((item, index) => (
+                {projects.map(({ id, title }) => (
                   <ListItemProject
-                    key={index}
-                    title="text"
+                    key={id}
+                    title={title}
                     openBoard={openBoard}
                     deleteBoard={deleteBoard}
                   />
