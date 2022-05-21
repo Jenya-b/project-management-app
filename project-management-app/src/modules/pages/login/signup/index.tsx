@@ -5,17 +5,31 @@ import { signup } from '../../../../store/reducers/login/loginThunks';
 import { TextField, Button } from '@mui/material';
 import ErrorSnackbar from '../../../components/errorSnackbar/errorSnackbar';
 import { clearErrors } from '../../../../store/reducers/login/loginSlice';
+import { useForm } from 'react-hook-form';
+
+export type FormValues = {
+  name: string;
+  login: string;
+  password: string;
+};
 
 export const SignUp = () => {
-  const [name, setName] = useState<string>('');
-  const [login, setLogin] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const { loading, user, token, errors } = useAppSelector((state) => state.loginReducer);
+  const {
+    loading,
+    user,
+    token,
+    errors: serverErrors,
+  } = useAppSelector((state) => state.loginReducer);
   const dispatch = useAppDispatch();
   const [userCreated, setUserCreated] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
 
-  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitForm = (data: FormValues) => {
+    const { name, login, password } = data;
     dispatch(signup({ name, login, password }));
   };
 
@@ -39,18 +53,16 @@ export const SignUp = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <form className="login-form" onSubmit={submitForm}>
+          <form className="login-form" onSubmit={handleSubmit(submitForm)}>
             <div className="login-form__field">
               <TextField
                 label="Name"
                 className="login-form__field-input"
                 type="text"
-                name="name"
-                value={name}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setName(event.target.value)
-                }
-                sx={{ marginTop: '2em' }}
+                sx={{ marginTop: '1em' }}
+                {...register('name', { required: 'Name is required!' })}
+                error={!!errors.name}
+                helperText={errors.name ? errors.name.message : 'New user name'}
               />
             </div>
             <div className="login-form__field">
@@ -58,13 +70,11 @@ export const SignUp = () => {
                 label="Login"
                 className="login-form__field-input"
                 type="text"
-                name="login"
                 autoComplete="userlogin"
-                value={login}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setLogin(event.target.value)
-                }
-                sx={{ marginTop: '2em' }}
+                sx={{ marginTop: '1em' }}
+                {...register('login', { required: 'Login is required!' })}
+                error={!!errors.login}
+                helperText={errors.login ? errors.login.message : 'New user login'}
               />
             </div>
             <div className="login-form__field">
@@ -72,13 +82,11 @@ export const SignUp = () => {
                 label="Password"
                 className="login-form__field-input"
                 type="password"
-                name="password"
                 autoComplete="new-password"
-                value={password}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setPassword(event.target.value)
-                }
-                sx={{ marginTop: '2em' }}
+                sx={{ marginTop: '1em' }}
+                {...register('password', { required: 'Password is required!' })}
+                error={!!errors.password}
+                helperText={errors.password ? errors.password.message : 'New user password'}
               />
             </div>
             <Button type="submit">Sign up</Button>
@@ -93,7 +101,7 @@ export const SignUp = () => {
           )}
         </div>
       )}
-      <ErrorSnackbar messages={errors} />
+      <ErrorSnackbar messages={serverErrors} />
     </div>
   );
 };
