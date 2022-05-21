@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   DELETE_PROFILE,
   DEL_PROFILE_TEXT,
@@ -36,6 +36,7 @@ import { confirmationDialogSlice } from '../../../store/reducers/confirmationDia
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { BasicModal } from '../modal';
 import { Boards } from '../../../utils/api/boards/boards';
+import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -48,6 +49,8 @@ export const Header = () => {
   const { setLanguage } = langInterfaceSlice.actions;
   const { setDialogActivity } = confirmationDialogSlice.actions;
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { homePath } = pathToPage;
 
   useEffect(() => {
     dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
@@ -121,14 +124,18 @@ export const Header = () => {
 
   const signOut = () => {};
 
-  const addNewProject = async () => {
-    console.log(newProjectTitle);
+  const getProjects = async () => {
+    dispatch(fetchProjects());
+  };
 
+  const addNewProject = async () => {
     const token = localStorage.getItem('user_token');
 
     if (token) {
       await Boards.createBoard({ title: newProjectTitle }, token);
     }
+    getProjects();
+    navigate(homePath);
   };
 
   return (
