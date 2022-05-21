@@ -9,6 +9,7 @@ import { useAppSelector } from '../../../hooks/useAppSelector';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { useEffect } from 'react';
 import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
+import { Boards } from '../../../utils/api/boards/boards';
 
 export const Main = () => {
   const { t } = useTranslation();
@@ -16,16 +17,22 @@ export const Main = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getProjects = async () => {
-      dispatch(fetchProjects());
-    };
-
-    getProjects().catch(console.error);
+    getProjects();
   }, []);
+
+  const getProjects = async () => {
+    dispatch(fetchProjects());
+  };
 
   const openBoard = () => {};
 
-  const deleteBoard = () => {};
+  const deleteBoard = async (id: string) => {
+    const token = localStorage.getItem('user_token');
+    if (token) {
+      await Boards.delete(id, token);
+    }
+    getProjects();
+  };
 
   return (
     <div className="main">
@@ -42,7 +49,7 @@ export const Main = () => {
                     key={id}
                     title={title}
                     openBoard={openBoard}
-                    deleteBoard={deleteBoard}
+                    deleteBoard={() => deleteBoard(id)}
                   />
                 ))}
               </List>
