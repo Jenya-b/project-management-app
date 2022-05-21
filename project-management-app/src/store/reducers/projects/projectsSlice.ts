@@ -8,13 +8,13 @@ export type ProjectsData = {
 
 export type ProjectsSliceType = {
   projects: ProjectsData[];
-  loading: boolean;
+  isLoading: boolean;
   error: string;
 };
 
 const initialState: ProjectsSliceType = {
   projects: [],
-  loading: false,
+  isLoading: false,
   error: '',
 };
 
@@ -25,13 +25,13 @@ export const projectsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchProjects.fulfilled, (state, action) => {
       state.projects = action.payload;
-      state.loading = false;
+      state.isLoading = false;
     });
     builder.addCase(fetchProjects.pending, (state) => {
-      state.loading = true;
+      state.isLoading = true;
     });
     builder.addCase(fetchProjects.rejected, (state, action) => {
-      state.loading = false;
+      state.isLoading = false;
       if (action.payload) {
         console.error(action.payload.message);
         switch (action.payload.statusCode) {

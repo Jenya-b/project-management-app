@@ -10,10 +10,11 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { useEffect } from 'react';
 import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { Boards } from '../../../utils/api/boards/boards';
+import { Loading } from '../../components/loading';
 
 export const Main = () => {
   const { t } = useTranslation();
-  const { projects } = useAppSelector((state) => state.projectsReducer);
+  const { projects, isLoading } = useAppSelector((state) => state.projectsReducer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -57,6 +58,7 @@ export const Main = () => {
           </Grid>
         </Grid>
       </Container>
+      <Loading isLoading={isLoading} />
     </div>
   );
 };
