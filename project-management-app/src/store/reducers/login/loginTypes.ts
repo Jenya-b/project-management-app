@@ -6,4 +6,5 @@ export interface LoginState {
     login: string;
     name: string;
   };
+  errors: string[];
 }

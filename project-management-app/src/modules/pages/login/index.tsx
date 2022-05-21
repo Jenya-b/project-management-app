@@ -19,7 +19,7 @@ export const Login = (props: LoginProps) => {
     <main className="main">
       <Container>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={tabIndex} onChange={handleChange}>
+          <Tabs value={tabIndex} onChange={handleChange} variant="fullWidth">
             <Tab value="signin" label="Sign in" />
             <Tab value="signup" label="Sign up" />
           </Tabs>
