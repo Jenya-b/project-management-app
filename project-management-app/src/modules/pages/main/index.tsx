@@ -6,6 +6,7 @@ import { Autoplay, Pagination, EffectFade } from 'swiper';
 import './index.scss';
 import { PrimaryBtn } from '../../components/button/index';
 import { buttonDescription, backgroundImages } from '../../constants/constMain';
+import { Link } from 'react-router-dom';
 
 export const Main = () => {
   const handleClick = () => {};
@@ -20,8 +21,10 @@ export const Main = () => {
         </h1>
       </div>
       <div className="btn-container">
-        {buttonDescription.map((btnText) => (
-          <PrimaryBtn key={btnText} variant="contained" text={btnText} onClick={handleClick} />
+        {buttonDescription.map((btn) => (
+          <Link key={btn.label} to={btn.link}>
+            <PrimaryBtn variant="contained" text={btn.label} onClick={handleClick} />
+          </Link>
         ))}
       </div>
       <Swiper

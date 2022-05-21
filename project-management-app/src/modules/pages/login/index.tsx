@@ -4,8 +4,13 @@ import { SignUp } from './signup';
 import { Container, Box, Tabs, Tab } from '@mui/material';
 import { useState } from 'react';
 
-export const Login = () => {
-  const [tabIndex, setTabIndex] = useState<string>('signin');
+interface LoginProps {
+  tab?: string;
+}
+
+export const Login = (props: LoginProps) => {
+  const tab = props.tab && props.tab === 'signup' ? 'signup' : 'signin';
+  const [tabIndex, setTabIndex] = useState<string>(tab);
   const handleChange = (event: React.SyntheticEvent, value: string) => {
     setTabIndex(value);
   };
