@@ -24,11 +24,7 @@ export default function ErrorSnackbar({ messages }: ErrorSnackbarProps) {
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
       <Box>
         {messages.map((message) => (
-          <Alert
-            key={message}
-            severity="error"
-            sx={{ width: '100%', marginBottom: '1em', color: '#ffffff' }}
-          >
+          <Alert key={message} severity="error" sx={{ width: '100%', marginBottom: '1em' }}>
             {message}
           </Alert>
         ))}

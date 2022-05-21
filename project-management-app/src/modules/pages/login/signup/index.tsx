@@ -6,6 +6,7 @@ import { TextField, Button } from '@mui/material';
 import ErrorSnackbar from '../../../components/errorSnackbar/errorSnackbar';
 import { clearErrors } from '../../../../store/reducers/login/loginSlice';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 export type FormValues = {
   name: string;
@@ -14,6 +15,7 @@ export type FormValues = {
 };
 
 export const SignUp = () => {
+  const { t } = useTranslation();
   const {
     loading,
     user,
@@ -44,7 +46,7 @@ export const SignUp = () => {
   }, [dispatch]);
 
   if (token) {
-    return <p>You are logged in</p>;
+    return <p>{t('userLoggedIn')}</p>;
   }
 
   return (
@@ -56,40 +58,48 @@ export const SignUp = () => {
           <form className="login-form" onSubmit={handleSubmit(submitForm)}>
             <div className="login-form__field">
               <TextField
-                label="Name"
+                label={t('nameFieldLabel')}
                 className="login-form__field-input"
                 type="text"
                 sx={{ marginTop: '1em' }}
-                {...register('name', { required: 'Name is required!' })}
+                {...register('name', { required: 'nameFieldRequiredError' })}
                 error={!!errors.name}
-                helperText={errors.name ? errors.name.message : 'New user name'}
+                helperText={errors.name ? t(String(errors.name.message)) : t('nameFieldHelpText')}
               />
             </div>
             <div className="login-form__field">
               <TextField
-                label="Login"
+                label={t('loginFieldLabel')}
                 className="login-form__field-input"
                 type="text"
                 autoComplete="userlogin"
                 sx={{ marginTop: '1em' }}
-                {...register('login', { required: 'Login is required!' })}
+                {...register('login', { required: 'loginFieldRequiredError' })}
                 error={!!errors.login}
-                helperText={errors.login ? errors.login.message : 'New user login'}
+                helperText={
+                  errors.login ? t(String(errors.login.message)) : t('loginFieldSignUpHelpText')
+                }
               />
             </div>
             <div className="login-form__field">
               <TextField
-                label="Password"
+                label={t('passwordFieldLabel')}
                 className="login-form__field-input"
                 type="password"
                 autoComplete="new-password"
                 sx={{ marginTop: '1em' }}
-                {...register('password', { required: 'Password is required!' })}
+                {...register('password', { required: 'passwordFieldRequiredError' })}
                 error={!!errors.password}
-                helperText={errors.password ? errors.password.message : 'New user password'}
+                helperText={
+                  errors.password
+                    ? t(String(errors.password.message))
+                    : t('passwordFieldSignUpHelpText')
+                }
               />
             </div>
-            <Button type="submit">Sign up</Button>
+            <Button type="submit" sx={{ marginTop: '1em' }}>
+              {t('signUpFormButtonText')}
+            </Button>
           </form>
           {!!userCreated && (
             <div>

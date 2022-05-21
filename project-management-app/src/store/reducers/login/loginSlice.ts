@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { LoginState } from './loginTypes';
 import { signup, signin } from './loginThunks';
-import { StatusCodes } from '../../../utils/api/responseError';
 import { makeArray } from '../../../utils/makeArray';
 
 export const USER_DATA_KEY = 'project_management_app_user_data';
@@ -47,6 +46,7 @@ const loginSlice = createSlice({
     builder.addCase(signup.fulfilled, (state, action) => {
       state.user = action.payload;
       state.loading = false;
+      state.errors = [];
       localStorage.setItem(USER_DATA_KEY, JSON.stringify(action.payload));
     });
     builder.addCase(signup.pending, (state) => {
@@ -55,12 +55,7 @@ const loginSlice = createSlice({
     builder.addCase(signup.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
-        const { statusCode, message } = action.payload;
-        switch (statusCode) {
-          case StatusCodes.BAD_REQUEST:
-            state.errors = makeArray(message);
-            break;
-        }
+        state.errors = makeArray(action.payload.message);
       } else {
         console.error(action.error);
       }
@@ -77,12 +72,7 @@ const loginSlice = createSlice({
     builder.addCase(signin.rejected, (state, action) => {
       state.loading = false;
       if (action.payload) {
-        const { statusCode, message } = action.payload;
-        switch (statusCode) {
-          case StatusCodes.BAD_REQUEST:
-            state.errors = makeArray(message);
-            break;
-        }
+        state.errors = makeArray(action.payload.message);
       } else {
         state.errors = ['Unknown error'];
         console.error(action.error);
