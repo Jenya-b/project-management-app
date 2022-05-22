@@ -9,7 +9,8 @@ import { Login } from '../../pages/login';
 import { RequireAuth } from './requiereAuth';
 
 export const RouterWrapper = () => {
-  const { homePath, projectPath, loginPath, usersPath, notFoundPath } = pathToPage;
+  const { homePath, projectPath, loginPath, signInPath, signUpPath, usersPath, notFoundPath } =
+    pathToPage;
 
   return (
     <Routes>
@@ -24,6 +25,8 @@ export const RouterWrapper = () => {
           }
         />
         <Route path={loginPath} element={<Login />} />
+        <Route path={signInPath} element={<Login tab="signin" />} />
+        <Route path={signUpPath} element={<Login tab="signup" />} />
         <Route
           path={usersPath}
           element={

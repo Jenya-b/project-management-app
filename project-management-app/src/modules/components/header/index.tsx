@@ -33,6 +33,7 @@ import { ConfirmationDialog } from '../confirmationDialog';
 import { confirmationDialogSlice } from '../../../store/reducers/confirmationDialogSlice';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { BasicModal } from '../modal';
+import { logout } from '../../../store/reducers/login/loginSlice';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -103,7 +104,9 @@ export const Header = () => {
 
   const deleteProfile = () => {};
 
-  const signOut = () => {};
+  const signOut = () => {
+    dispatch(logout());
+  };
 
   return (
     <>
