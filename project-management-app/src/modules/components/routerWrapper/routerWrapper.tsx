@@ -24,7 +24,14 @@ export const RouterWrapper = () => {
   return (
     <Routes>
       <Route path={homePath} element={<Layout />}>
-        <Route index element={<Main />} />
+        <Route
+          index
+          element={
+            <RequireAuth>
+              <Main />
+            </RequireAuth>
+          }
+        />
         <Route
           path={projectPath}
           element={
