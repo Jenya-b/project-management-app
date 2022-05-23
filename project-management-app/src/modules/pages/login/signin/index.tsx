@@ -7,6 +7,8 @@ import ErrorSnackbar from '../../../components/errorSnackbar/errorSnackbar';
 import { clearErrors } from '../../../../store/reducers/login/loginSlice';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { pathToPage } from '../../../constants/constRoutes';
 
 export type FormValues = {
   login: string;
@@ -22,6 +24,8 @@ export const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
+  const navigate = useNavigate();
+  const { homePath } = pathToPage;
 
   const submitForm = (data: FormValues) => {
     const { login, password } = data;
@@ -33,6 +37,12 @@ export const SignIn = () => {
       dispatch(clearErrors());
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (token) {
+      navigate(homePath);
+    }
+  }, [token]);
 
   if (token) {
     return <p>{t('userLoggedIn')}</p>;
