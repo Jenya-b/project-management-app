@@ -37,6 +37,7 @@ import { useAppSelector } from '../../../hooks/useAppSelector';
 import { BasicModal } from '../modal';
 import { Boards } from '../../../utils/api/boards/boards';
 import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
+import { logout } from '../../../store/reducers/login/loginSlice';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -122,7 +123,9 @@ export const Header = () => {
 
   const deleteProfile = () => {};
 
-  const signOut = () => {};
+  const signOut = () => {
+    dispatch(logout());
+  };
 
   const getProjects = async () => {
     dispatch(fetchProjects());
