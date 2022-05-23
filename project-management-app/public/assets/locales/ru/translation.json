@@ -20,5 +20,7 @@
   "ListOfProjects": "Список проектов",
   "ProjectDescription": "Описание проекта",
   "newProjectTypography": "Создать новый проект",
-  "projectName": "Название проекта"
+  "projectName": "Название проекта",
+  "projectDesc": "Описание проекта",
+  "numberTask": "Количество задач"
 }

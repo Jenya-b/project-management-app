@@ -1,32 +1,44 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchProjects } from './projectsThunks';
+import { fetchProjectById } from './projectByIdThunks';
 import { ProjectsData } from './projectsType';
 
-export type ProjectsSliceType = {
-  projects: ProjectsData[];
+type ProjectSliceType = {
+  project: ProjectsData;
   isLoading: boolean;
   error: string;
+  projectId: string;
 };
 
-const initialState: ProjectsSliceType = {
-  projects: [],
+const initialState: ProjectSliceType = {
+  project: {
+    title: '',
+    id: '',
+  },
   isLoading: false,
   error: '',
+  projectId: '',
 };
 
-export const projectsSlice = createSlice({
-  name: 'projects',
+export const projectByIdSlice = createSlice({
+  name: 'project',
   initialState,
-  reducers: {},
+  reducers: {
+    setProjectId(state, action) {
+      state.projectId = action.payload;
+    },
+    setProject(state, action) {
+      state.project = action.payload;
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(fetchProjects.fulfilled, (state, action) => {
-      state.projects = action.payload;
+    builder.addCase(fetchProjectById.fulfilled, (state, action) => {
+      state.project = action.payload;
       state.isLoading = false;
     });
-    builder.addCase(fetchProjects.pending, (state) => {
+    builder.addCase(fetchProjectById.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(fetchProjects.rejected, (state, action) => {
+    builder.addCase(fetchProjectById.rejected, (state, action) => {
       state.isLoading = false;
       if (action.payload) {
         console.error(action.payload.message);
@@ -45,4 +57,4 @@ export const projectsSlice = createSlice({
   },
 });
 
-export default projectsSlice.reducer;
+export default projectByIdSlice.reducer;

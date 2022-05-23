@@ -30,7 +30,9 @@ export type ConfirmationDialogType = {
 };
 
 export type ListItemProjectType = {
+  id: string;
   title: string;
+  activeProjectId: string;
   deleteBoard: () => void;
   openBoard: () => void;
 };

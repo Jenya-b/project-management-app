@@ -20,5 +20,7 @@
   "ListOfProjects": "List of projects",
   "ProjectDescription": "Project description",
   "newProjectTypography": "Add new project",
-  "projectName": "Project name"
+  "projectName": "Project name",
+  "projectDesc": "Project description",
+  "numberTask": "Number of tasks"
 }

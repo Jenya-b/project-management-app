@@ -4,6 +4,7 @@ import langInterfaceReducer from './reducers/langInterfaceSlice';
 import loginReducer from './reducers/login/loginSlice';
 import usersReducer from './reducers/users/usersSlice';
 import projectsReducer from './reducers/projects/projectsSlice';
+import projectByIdReducer from './reducers/projects/projectByIdSlice';
 
 export const rootReducer = combineReducers({
   confirmationDialog,
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
   loginReducer,
   usersReducer,
   projectsReducer,
+  projectByIdReducer,
 });
 
 export const setupStore = () => configureStore({ reducer: rootReducer });
