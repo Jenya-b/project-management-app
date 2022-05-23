@@ -52,6 +52,7 @@ export const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { homePath } = pathToPage;
+  const { token } = useAppSelector((state) => state.loginReducer);
 
   useEffect(() => {
     dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
@@ -132,8 +133,6 @@ export const Header = () => {
   };
 
   const addNewProject = async () => {
-    const token = localStorage.getItem('user_token');
-
     if (token) {
       await Boards.createBoard({ title: newProjectTitle }, token);
     }

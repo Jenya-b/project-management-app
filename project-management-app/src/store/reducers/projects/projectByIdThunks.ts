@@ -15,7 +15,7 @@ export const fetchProjectById = createAsyncThunk<
     rejectValue: ResponseError;
   }
 >('project/fetchAll', async ({ id }, thunkApi) => {
-  const token = localStorage.getItem('user_token');
+  const token = thunkApi.getState().loginReducer.token;
   const response = await Boards.getBoardById(id, token ?? '');
   if (!response.ok) {
     const errorDetails: ResponseError = await response.json();

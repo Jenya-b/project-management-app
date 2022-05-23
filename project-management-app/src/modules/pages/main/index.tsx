@@ -23,6 +23,7 @@ export const Main = () => {
   const { project, projectId } = useAppSelector((state) => state.projectByIdReducer);
   const dispatch = useAppDispatch();
   const { setProject, setProjectId } = projectByIdSlice.actions;
+  const { token } = useAppSelector((state) => state.loginReducer);
 
   useEffect(() => {
     getProjects();
@@ -51,7 +52,6 @@ export const Main = () => {
   const openBoard = () => {};
 
   const deleteBoard = async (id: string) => {
-    const token = localStorage.getItem('user_token');
     if (token) {
       await Boards.delete(id, token);
     }
