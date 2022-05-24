@@ -22,7 +22,7 @@ type TaskProps = {
 export const Task = ({ id, title, order, description, columnId }: TaskProps) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.loginReducer);
-  const { boardId } = useAppSelector((state) => state.boardReducer);
+  const { projectId } = useAppSelector((state) => state.projectByIdReducer);
 
   const onClick = (action: ModalAction) => {
     dispatch(setmodalAction(action));
@@ -32,7 +32,7 @@ export const Task = ({ id, title, order, description, columnId }: TaskProps) => 
         description,
         order,
         columnId,
-        boardId,
+        boardId: projectId,
         userId: user.id,
         id,
       })

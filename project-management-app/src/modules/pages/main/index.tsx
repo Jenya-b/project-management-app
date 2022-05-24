@@ -1,53 +1,107 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/effect-fade';
-import 'swiper/css/pagination';
-import { Autoplay, Pagination, EffectFade } from 'swiper';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { ListItemProject } from '../../components/listItemProject';
+import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '../../../hooks/useAppSelector';
+import { useAppDispatch } from '../../../hooks/useAppDispatch';
+import { useEffect } from 'react';
+import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
+import { fetchProjectById } from '../../../store/reducers/projects/projectByIdThunks';
+import { Boards } from '../../../utils/api/boards/boards';
+import { Loading } from '../../components/loading';
+import { projectByIdSlice } from '../../../store/reducers/projects/projectByIdSlice';
+import { PrimaryBtn } from '../../components/button';
+import { Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import './index.scss';
-import { PrimaryBtn } from '../../components/button/index';
-import { buttonDescription, backgroundImages } from '../../constants/constMain';
 
 export const Main = () => {
-  const handleClick = () => {};
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { projects, isLoading } = useAppSelector((state) => state.projectsReducer);
+  const { project, projectId } = useAppSelector((state) => state.projectByIdReducer);
+  const dispatch = useAppDispatch();
+  const { setProject, setProjectId } = projectByIdSlice.actions;
+  const { token } = useAppSelector((state) => state.loginReducer);
+
+  useEffect(() => {
+    getProjects();
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (projects.length) {
+        getProjectDescription(projects[0].id);
+        dispatch(setProject(projects[0]));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [projects]);
+
+  const getProjects = async () => {
+    dispatch(fetchProjects());
+  };
+
+  const getProjectDescription = async (id: string) => {
+    dispatch(setProjectId(id));
+    dispatch(fetchProjectById({ id }));
+  };
+
+  const openBoard = () => {
+    navigate('/board');
+  };
+
+  const deleteBoard = async (id: string) => {
+    if (token) {
+      await Boards.delete(id, token);
+    }
+    getProjects();
+  };
 
   return (
-    <div className="container">
-      <div className="title-container">
-        <h1 className="title">
-          Project <br />
-          Management
-          <br /> &emsp;&emsp;&emsp;&nbsp;&nbsp;App
-        </h1>
-      </div>
-      <div className="btn-container">
-        {buttonDescription.map((btnText) => (
-          <PrimaryBtn key={btnText} variant="contained" text={btnText} onClick={handleClick} />
-        ))}
-      </div>
-      <Swiper
-        spaceBetween={30}
-        effect={'fade'}
-        centeredSlides={true}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[Autoplay, Pagination, EffectFade]}
-      >
-        {backgroundImages.map((image) => (
-          <SwiperSlide key={image}>
-            <div
-              className="slide"
-              style={{
-                backgroundImage: `url("${image}")`,
-              }}
-            ></div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+    <div className="main">
+      <Container>
+        <Grid container spacing={14}>
+          <Grid item xs={12} md={6}>
+            <Typography sx={{ mt: 4, mb: 2, fontSize: '1.8rem' }} variant="h6">
+              {t('ListOfProjects')}
+            </Typography>
+            <Box>
+              <List>
+                {projects.map(({ id, title }) => (
+                  <ListItemProject
+                    key={id}
+                    id={id}
+                    title={title}
+                    activeProjectId={projectId}
+                    openBoard={() => getProjectDescription(id)}
+                    deleteBoard={() => deleteBoard(id)}
+                  />
+                ))}
+              </List>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography sx={{ mt: 4, mb: 2, fontSize: '1.8rem' }} variant="h6">
+              {t('projectDesc')}
+            </Typography>
+            <Stack spacing={2} sx={{ marginBottom: 4 }}>
+              <div className="project-desc">
+                {t('projectName')}: <span>{project.title}</span>
+              </div>
+              <div className="project-desc">
+                {t('numberTask')}: <span>{project.columns?.length}</span>
+              </div>
+            </Stack>
+            <PrimaryBtn variant="contained" text="Open project" onClick={openBoard} />
+          </Grid>
+        </Grid>
+      </Container>
+      <Loading isLoading={isLoading} />
     </div>
   );
 };

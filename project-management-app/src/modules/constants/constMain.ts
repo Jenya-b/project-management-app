@@ -5,4 +5,13 @@ export const backgroundImages = [
   'https://images.unsplash.com/photo-1448932284983-0c7b152eba33',
 ];
 
-export const buttonDescription = ['logIn', 'signUp'];
+export const buttonDescription = [
+  {
+    label: 'logIn',
+    link: '/login/signin',
+  },
+  {
+    label: 'signUp',
+    link: '/login/signup',
+  },
+];

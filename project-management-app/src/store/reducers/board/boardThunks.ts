@@ -18,8 +18,8 @@ export const getBoard = createAsyncThunk<
   }
 >('board/getBoard', async function (_, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Board.getById(token, boardId);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Board.getById(token, projectId);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -65,8 +65,8 @@ export const getColumns = createAsyncThunk<
   }
 >('board/getColumns', async function (_, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Column.getAll(token, boardId);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Column.getAll(token, projectId);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -88,8 +88,8 @@ export const getTasks = createAsyncThunk<
   }
 >('board/getTasks', async function (columnId, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Task.getAll(token, boardId, columnId);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Task.getAll(token, projectId, columnId);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -111,8 +111,8 @@ export const createColumn = createAsyncThunk<
   }
 >('board/createColumn', async function (columnData, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Column.create(token, boardId, columnData);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Column.create(token, projectId, columnData);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -137,8 +137,8 @@ export const createTask = createAsyncThunk<
   }
 >('board/createTask', async function ({ columnId, taskData }, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Task.create(token, boardId, columnId, taskData);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Task.create(token, projectId, columnId, taskData);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -163,8 +163,8 @@ export const updateColumn = createAsyncThunk<
   }
 >('board/updateColumn', async function ({ columnId, columnData }, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Column.update(token, boardId, columnId, columnData);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Column.update(token, projectId, columnId, columnData);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -197,8 +197,8 @@ export const updateTask = createAsyncThunk<
   }
 >('board/updateTask', async function ({ columnId, taskId, taskData }, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Task.update(token, boardId, columnId, taskId, taskData);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Task.update(token, projectId, columnId, taskId, taskData);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -220,8 +220,8 @@ export const deleteColumn = createAsyncThunk<
   }
 >('board/deleteColumn', async function ({ columnId, order }, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Column.delete(token, boardId, columnId);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Column.delete(token, projectId, columnId);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -242,8 +242,8 @@ export const deleteTask = createAsyncThunk<
   }
 >('board/deleteTask', async function ({ columnId, taskId, order }, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
-  const res = await Task.delete(token, boardId, columnId, taskId);
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
+  const res = await Task.delete(token, projectId, columnId, taskId);
   if (!res.ok) {
     const errorDetails: ResponseError = await res.json();
     if (errorDetails.statusCode === 401) {
@@ -264,7 +264,7 @@ export const updateTaskOrder = createAsyncThunk<
   }
 >('board/updateTaskOrder', async function (position, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
+  const boardId = thunkApi.getState().projectByIdReducer.projectId;
   const board = thunkApi.getState().boardReducer.board;
   const taskId = position.draggableId;
   const columnId = position.destination?.droppableId || '';
@@ -302,13 +302,13 @@ export const updateColumnOrder = createAsyncThunk<
   }
 >('board/updateColumnOrder', async function (position, thunkApi) {
   const token = thunkApi.getState().loginReducer.token;
-  const boardId = thunkApi.getState().boardReducer.boardId;
+  const projectId = thunkApi.getState().projectByIdReducer.projectId;
   const board = thunkApi.getState().boardReducer.board;
   const columnId = position.draggableId;
   const column = board.columns.find((item) => item.id === columnId);
   const title = column?.title || '';
   const order = position.destination?.index || 0;
-  const res = await Column.update(token, boardId, columnId, {
+  const res = await Column.update(token, projectId, columnId, {
     title,
     order: order + 1,
   });

@@ -33,8 +33,10 @@ import { useNavigate } from 'react-router-dom';
 export const Board = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation();
-  const { board, error, modalAction, taskData, columnData, boardId, isModalFormOpen } =
-    useAppSelector((state) => state.boardReducer);
+  const { board, error, modalAction, taskData, columnData, isModalFormOpen } = useAppSelector(
+    (state) => state.boardReducer
+  );
+  const { projectId } = useAppSelector((state) => state.projectByIdReducer);
   const { user } = useAppSelector((state) => state.loginReducer);
   const titleInput: React.RefObject<HTMLInputElement> = React.createRef();
   const taskDescription: React.RefObject<HTMLInputElement> = React.createRef();
@@ -48,6 +50,8 @@ export const Board = () => {
   const closeFormModal = () => {
     dispatch(setIsModalFormOpen(false));
   };
+
+  console.log(user);
 
   const confirmAction = () => {
     const title = titleInput?.current?.value || '';
@@ -72,7 +76,7 @@ export const Board = () => {
           updateTask({
             columnId,
             taskId,
-            taskData: { title, order, description, userId: user.id, boardId, columnId },
+            taskData: { title, order, description, userId: user.id, boardId: projectId, columnId },
           })
         ).then(() => closeFormModal());
         break;
@@ -164,11 +168,11 @@ export const Board = () => {
     }
   };
   return (
-    <Box sx={{ backgroundColor: BACKGROUND_COLOR, height: 'calc(100vh - 10.2rem)' }}>
+    <Box sx={{ backgroundColor: BACKGROUND_COLOR, height: 'calc(100vh - 10.5rem)' }}>
       <Box sx={{ mx: '2.3rem' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', my: '1.5rem' }}>
           <Typography variant="h3" component="h1">
-            Tasks Board
+            Project Board
           </Typography>
           <PrimaryBtn text="add column" variant="contained" onClick={onClick}></PrimaryBtn>
         </Box>

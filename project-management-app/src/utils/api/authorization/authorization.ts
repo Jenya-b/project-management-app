@@ -1,4 +1,4 @@
-import API from './base';
+import API from '../base';
 import { SigninRequest, SignupRequest } from './authorizationTypes';
 
 export const Authorization = {

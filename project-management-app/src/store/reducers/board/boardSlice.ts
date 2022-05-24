@@ -22,7 +22,6 @@ import {
 
 type BoardInitialState = {
   board: BoardType;
-  boardId: string;
   error: null | string;
   isLoading: boolean;
   taskData: TaskType | null;
@@ -33,7 +32,6 @@ type BoardInitialState = {
 
 const initialState: BoardInitialState = {
   board: { id: '', title: '', columns: [] },
-  boardId: '',
   error: null,
   isLoading: true,
   taskData: null,
@@ -46,10 +44,6 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState: initialState,
   reducers: {
-    setBoardId(state, action: PayloadAction<string>) {
-      state.boardId = action.payload;
-    },
-
     setIsModalFormOpen(state, action: PayloadAction<boolean>) {
       state.isModalFormOpen = action.payload;
     },
@@ -220,7 +214,6 @@ export const boardSlice = createSlice({
 });
 
 export const {
-  setBoardId,
   setError,
   setmodalAction,
   setTaskData,

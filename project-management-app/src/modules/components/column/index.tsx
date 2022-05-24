@@ -39,7 +39,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
   const dispatch = useAppDispatch();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const columnTitle: React.RefObject<HTMLInputElement> = React.createRef();
-  const { boardId } = useAppSelector((state) => state.boardReducer);
+  const { projectId } = useAppSelector((state) => state.projectByIdReducer);
   const { user } = useAppSelector((state) => state.loginReducer);
 
   const onConfirm = () => {
@@ -59,7 +59,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
         description: '',
         order: tasks.length,
         columnId: id,
-        boardId,
+        boardId: projectId,
         userId: user.id,
         id: '',
       })

@@ -12,7 +12,10 @@ const style = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  paddingLeft: 10,
+  paddingRight: 10,
+  paddingTop: 4,
+  paddingBottom: 4,
 };
 
 export const BasicModal = ({ isActive, closeWindow, confirmAction, children }: BasicModalType) => (
