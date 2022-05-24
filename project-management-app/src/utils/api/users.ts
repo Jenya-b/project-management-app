@@ -7,5 +7,5 @@ export interface UserData {
 }
 
 export const Users = {
-  getAll: (token: string) => API.get<UserData[]>('users', token),
+  getAll: (token: string) => API.get('users', token),
 };

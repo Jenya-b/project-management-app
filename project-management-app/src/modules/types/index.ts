@@ -28,3 +28,56 @@ export type ConfirmationDialogType = {
   title: string;
   desc: string;
 };
+
+export type BoardType = {
+  id: string;
+  title: string;
+  columns: IColumn[];
+};
+
+export interface IColumn {
+  id: string;
+  title: string;
+  order: number;
+  tasks: ITask[];
+}
+
+export type ColumnType = {
+  id: string;
+  title: string;
+  order: number;
+};
+
+export interface ITask {
+  id: string;
+  title: string;
+  order: number;
+  done: boolean;
+  description: string;
+  userId: string;
+  boardId: string;
+  columnId: string;
+  files: IFile[];
+}
+
+export interface IFile {
+  filename: string;
+  fileSize: number;
+}
+
+export type TaskType = {
+  id: string;
+  title: string;
+  order: number;
+  description: string;
+  userId: string;
+  boardId: string;
+  columnId: string;
+};
+
+export type ModalAction =
+  | 'createTask'
+  | 'createColumn'
+  | 'updateTask'
+  | 'deleteTask'
+  | 'deleteColumn';
