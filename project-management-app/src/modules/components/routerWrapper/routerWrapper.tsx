@@ -7,15 +7,31 @@ import { NotFound } from '../../pages/notFound';
 import { Project } from '../../pages/project';
 import { Login } from '../../pages/login';
 import { RequireAuth } from './requiereAuth';
+import { Welcome } from '../../pages/welcome';
 
 export const RouterWrapper = () => {
-  const { homePath, projectPath, loginPath, signInPath, signUpPath, usersPath, notFoundPath } =
-    pathToPage;
+  const {
+    homePath,
+    projectPath,
+    loginPath,
+    signInPath,
+    signUpPath,
+    usersPath,
+    notFoundPath,
+    welcomePath,
+  } = pathToPage;
 
   return (
     <Routes>
       <Route path={homePath} element={<Layout />}>
-        <Route index element={<Main />} />
+        <Route
+          index
+          element={
+            <RequireAuth>
+              <Main />
+            </RequireAuth>
+          }
+        />
         <Route
           path={projectPath}
           element={
@@ -27,6 +43,7 @@ export const RouterWrapper = () => {
         <Route path={loginPath} element={<Login />} />
         <Route path={signInPath} element={<Login tab="signin" />} />
         <Route path={signUpPath} element={<Login tab="signup" />} />
+        <Route path={welcomePath} element={<Welcome />} />
         <Route
           path={usersPath}
           element={

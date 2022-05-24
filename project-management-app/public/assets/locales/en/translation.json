@@ -30,5 +30,11 @@
   "passwordFieldSignUpHelpText": "New user password",
   "passwordFieldSignInHelpText": "Your password",
   "signUpFormButtonText": "Sign Up",
-  "signInFormButtonText": "Sign In"
+  "signInFormButtonText": "Sign In",
+  "ListOfProjects": "List of projects",
+  "ProjectDescription": "Project description",
+  "newProjectTypography": "Add new project",
+  "projectName": "Project name",
+  "projectDesc": "Project description",
+  "numberTask": "Number of tasks"
 }

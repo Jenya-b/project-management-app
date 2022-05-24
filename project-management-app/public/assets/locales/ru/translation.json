@@ -30,5 +30,11 @@
   "passwordFieldSignUpHelpText": "Пароль нового пользователя",
   "passwordFieldSignInHelpText": "Ваш пароль",
   "signUpFormButtonText": "Зарегистрироваться",
-  "signInFormButtonText": "Войти"
+  "signInFormButtonText": "Войти",
+  "ListOfProjects": "Список проектов",
+  "ProjectDescription": "Описание проекта",
+  "newProjectTypography": "Создать новый проект",
+  "projectName": "Название проекта",
+  "projectDesc": "Описание проекта",
+  "numberTask": "Количество задач"
 }
