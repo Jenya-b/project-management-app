@@ -17,6 +17,8 @@
   "notFoundTitle": "404 Not Found",
   "notFoundDesc": "Something seems to have gone wrong! The page you are requesting does not exist. Perhaps it is out of date, has been removed, or an incorrect address has been entered in the address bar.",
   "notFoundButton": "Home Page",
+  "deleteTaskModal": "Are you sure you want to delete the task?",
+  "deleteColumnModal": "Are you sure you want to delete the column?",
   "userLoggedIn": "You are logged in",
   "nameFieldLabel": "Name",
   "nameFieldRequiredError": "Name is required!",

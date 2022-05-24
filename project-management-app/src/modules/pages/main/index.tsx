@@ -15,10 +15,12 @@ import { Loading } from '../../components/loading';
 import { projectByIdSlice } from '../../../store/reducers/projects/projectByIdSlice';
 import { PrimaryBtn } from '../../components/button';
 import { Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import './index.scss';
 
 export const Main = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { projects, isLoading } = useAppSelector((state) => state.projectsReducer);
   const { project, projectId } = useAppSelector((state) => state.projectByIdReducer);
   const dispatch = useAppDispatch();
@@ -49,7 +51,9 @@ export const Main = () => {
     dispatch(fetchProjectById({ id }));
   };
 
-  const openBoard = () => {};
+  const openBoard = () => {
+    navigate('/board');
+  };
 
   const deleteBoard = async (id: string) => {
     if (token) {

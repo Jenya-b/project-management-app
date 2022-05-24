@@ -24,7 +24,20 @@ const API = {
     const response = await fetch(`${API_URL}/${request}`, init);
     return response;
   },
-  delete: async (request: string, id: string, token: string): Promise<Response> => {
+  put: async <D>(request: string, data: D, token: string): Promise<Response> => {
+    const init = {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    };
+    const response = await fetch(`${API_URL}/${request}`, init);
+    return response;
+  },
+  delete: async (request: string, token: string): Promise<Response> => {
     const init = {
       method: 'DELETE',
       headers: {
@@ -32,7 +45,7 @@ const API = {
         Authorization: `Bearer ${token}`,
       },
     };
-    const response = await fetch(`${API_URL}/${request}/${id}`, init);
+    const response = await fetch(`${API_URL}/${request}`, init);
     return response;
   },
   getBoardById: async (request: string, id: string, token: string): Promise<Response> => {
