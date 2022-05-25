@@ -4,7 +4,6 @@ import { pathToPage } from '../../constants/constRoutes';
 import { Main } from '../../pages/main';
 import { Users } from '../../pages/users';
 import { NotFound } from '../../pages/notFound';
-import { Project } from '../../pages/project';
 import { Login } from '../../pages/login';
 import { RequireAuth } from './requiereAuth';
 import { Welcome } from '../../pages/welcome';
@@ -14,7 +13,6 @@ import { PassedAuth } from './passedAuth';
 export const RouterWrapper = () => {
   const {
     homePath,
-    projectPath,
     loginPath,
     signInPath,
     signUpPath,
@@ -32,14 +30,6 @@ export const RouterWrapper = () => {
           element={
             <RequireAuth>
               <Main />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={projectPath}
-          element={
-            <RequireAuth>
-              <Project />
             </RequireAuth>
           }
         />
@@ -61,7 +51,14 @@ export const RouterWrapper = () => {
           }
         />
         <Route path={welcomePath} element={<Welcome />} />
-        <Route path={boardPath} element={<Board />} />
+        <Route
+          path={boardPath}
+          element={
+            <RequireAuth>
+              <Board />
+            </RequireAuth>
+          }
+        />
         <Route
           path={usersPath}
           element={
