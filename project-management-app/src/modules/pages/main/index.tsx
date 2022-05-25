@@ -94,10 +94,13 @@ export const Main = () => {
                 {t('projectName')}: <span>{project.title}</span>
               </div>
               <div className="project-desc">
+                {t('projectDesc')}: <span>{project.description}</span>
+              </div>
+              <div className="project-desc">
                 {t('numberTask')}: <span>{project.columns?.length}</span>
               </div>
             </Stack>
-            <PrimaryBtn variant="contained" text="Open project" onClick={openBoard} />
+            <PrimaryBtn variant="contained" text={t('openProject')} onClick={openBoard} />
           </Grid>
         </Grid>
       </Container>
