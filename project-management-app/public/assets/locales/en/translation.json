@@ -40,5 +40,6 @@
   "projectDesc": "Project description",
   "numberTask": "Number of tasks",
   "openProject": "Open project",
-  "confirmDeleteProject": "Are you sure you want to delete the project?"
+  "confirmDeleteProject": "Are you sure you want to delete the project?",
+  "gotoMainPage": "Go to Main Page"
 }
