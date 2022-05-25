@@ -29,6 +29,7 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { ConfirmationDialog } from '../../components/confirmationDialog';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/header';
 
 export const Board = () => {
   const dispatch = useAppDispatch();
@@ -168,62 +169,65 @@ export const Board = () => {
     }
   };
   return (
-    <Box sx={{ backgroundColor: BACKGROUND_COLOR, height: 'calc(100vh - 10.5rem)' }}>
-      <Box sx={{ mx: '2.3rem' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', my: '1.5rem' }}>
-          <Typography variant="h3" component="h1">
-            Project Board
-          </Typography>
-          <PrimaryBtn text="add column" variant="contained" onClick={onClick}></PrimaryBtn>
+    <>
+      <Header />
+      <Box sx={{ backgroundColor: BACKGROUND_COLOR, height: 'calc(100vh - 10.5rem)' }}>
+        <Box sx={{ mx: '2.3rem' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', my: '1.5rem' }}>
+            <Typography variant="h3" component="h1">
+              Project Board
+            </Typography>
+            <PrimaryBtn text="add column" variant="contained" onClick={onClick}></PrimaryBtn>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', columnGap: '1rem' }}>
+            <Button variant="outlined" startIcon={<FullscreenIcon />}>
+              Fullscreen
+            </Button>
+            <Button variant="outlined" onClick={goBack} startIcon={<ExitToAppIcon />}>
+              go back
+            </Button>
+          </Box>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', columnGap: '1rem' }}>
-          <Button variant="outlined" startIcon={<FullscreenIcon />}>
-            Fullscreen
-          </Button>
-          <Button variant="outlined" onClick={goBack} startIcon={<ExitToAppIcon />}>
-            go back
-          </Button>
-        </Box>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Box sx={{ overflowX: 'auto', m: '2.3rem', mb: '0' }}>
+            <Droppable droppableId="allColumns" direction="horizontal" type="column">
+              {(provided) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    minWidth: 'min-content',
+                  }}
+                >
+                  {board.columns.map((column) => (
+                    <Column
+                      key={column.id}
+                      id={column.id}
+                      title={column.title}
+                      order={column.order}
+                      tasks={column.tasks}
+                    ></Column>
+                  ))}
+                </div>
+              )}
+            </Droppable>
+          </Box>
+        </DragDropContext>
+        <BasicModal
+          isActive={isModalFormOpen}
+          closeWindow={closeFormModal}
+          confirmAction={confirmAction}
+        >
+          {getModalContent()}
+        </BasicModal>
+        <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={clearError}>
+          <Alert onClose={clearError} severity="error" sx={{ width: '100%' }}>
+            {error}
+          </Alert>
+        </Snackbar>
       </Box>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Box sx={{ overflowX: 'auto', m: '2.3rem', mb: '0' }}>
-          <Droppable droppableId="allColumns" direction="horizontal" type="column">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  minWidth: 'min-content',
-                }}
-              >
-                {board.columns.map((column) => (
-                  <Column
-                    key={column.id}
-                    id={column.id}
-                    title={column.title}
-                    order={column.order}
-                    tasks={column.tasks}
-                  ></Column>
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </Box>
-      </DragDropContext>
-      <BasicModal
-        isActive={isModalFormOpen}
-        closeWindow={closeFormModal}
-        confirmAction={confirmAction}
-      >
-        {getModalContent()}
-      </BasicModal>
-      <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={clearError}>
-        <Alert onClose={clearError} severity="error" sx={{ width: '100%' }}>
-          {error}
-        </Alert>
-      </Snackbar>
-    </Box>
+    </>
   );
 };
