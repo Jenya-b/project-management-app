@@ -9,6 +9,7 @@ import { Login } from '../../pages/login';
 import { RequireAuth } from './requiereAuth';
 import { Welcome } from '../../pages/welcome';
 import { Board } from '../../pages/board';
+import { PassedAuth } from './passedAuth';
 
 export const RouterWrapper = () => {
   const {
@@ -43,8 +44,22 @@ export const RouterWrapper = () => {
           }
         />
         <Route path={loginPath} element={<Login />} />
-        <Route path={signInPath} element={<Login tab="signin" />} />
-        <Route path={signUpPath} element={<Login tab="signup" />} />
+        <Route
+          path={signInPath}
+          element={
+            <PassedAuth>
+              <Login tab="signin" />
+            </PassedAuth>
+          }
+        />
+        <Route
+          path={signUpPath}
+          element={
+            <PassedAuth>
+              <Login tab="signup" />
+            </PassedAuth>
+          }
+        />
         <Route path={welcomePath} element={<Welcome />} />
         <Route path={boardPath} element={<Board />} />
         <Route
