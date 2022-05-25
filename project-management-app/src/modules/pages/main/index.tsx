@@ -8,9 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { useEffect } from 'react';
-import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
+import { deleteProject, fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { fetchProjectById } from '../../../store/reducers/projects/projectByIdThunks';
-import { Boards } from '../../../utils/api/boards/boards';
 import { Loading } from '../../components/loading';
 import { projectByIdSlice } from '../../../store/reducers/projects/projectByIdSlice';
 import { PrimaryBtn } from '../../components/button';
@@ -25,7 +24,6 @@ export const Main = () => {
   const { project, projectId } = useAppSelector((state) => state.projectByIdReducer);
   const dispatch = useAppDispatch();
   const { setProject, setProjectId } = projectByIdSlice.actions;
-  const { token } = useAppSelector((state) => state.loginReducer);
 
   useEffect(() => {
     getProjects();
@@ -56,10 +54,7 @@ export const Main = () => {
   };
 
   const deleteBoard = async (id: string) => {
-    if (token) {
-      await Boards.delete(id, token);
-    }
-    getProjects();
+    dispatch(deleteProject({ id })).then(() => getProjects());
   };
 
   return (
