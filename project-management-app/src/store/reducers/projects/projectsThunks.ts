@@ -26,3 +26,27 @@ export const fetchProjects = createAsyncThunk<
   const content = await response.json();
   return content;
 });
+
+export const createProject = createAsyncThunk<
+  ProjectsData,
+  {
+    projectData: { title: string; description: string };
+  },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+    rejectValue: ResponseError;
+  }
+>('project/createProject', async function ({ projectData }, thunkApi) {
+  const token = thunkApi.getState().loginReducer.token;
+  const response = await Boards.createBoard(projectData, token ?? '');
+  if (!response.ok) {
+    const errorDetails: ResponseError = await response.json();
+    if (errorDetails.statusCode === 401) {
+      thunkApi.dispatch(logout());
+    }
+    return thunkApi.rejectWithValue(errorDetails);
+  }
+  const content = await response.json();
+  return content;
+});

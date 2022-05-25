@@ -2,6 +2,7 @@ import API from '../base';
 
 interface ProjectRequest {
   title: string;
+  description: string;
 }
 
 export const Boards = {

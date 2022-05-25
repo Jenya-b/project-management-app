@@ -5,6 +5,7 @@ export interface ProjectByIdRequest {
 export type ProjectsData = {
   title: string;
   id: string;
+  description: string;
   columns?: [
     {
       id: string;

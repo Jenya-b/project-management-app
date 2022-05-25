@@ -13,6 +13,7 @@ const initialState: ProjectSliceType = {
   project: {
     title: '',
     id: '',
+    description: '',
   },
   isLoading: false,
   error: '',
