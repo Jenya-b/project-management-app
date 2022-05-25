@@ -39,5 +39,6 @@
   "projectName": "Project name",
   "projectDesc": "Project description",
   "numberTask": "Number of tasks",
-  "openProject": "Open project"
+  "openProject": "Open project",
+  "confirmDeleteProject": "Are you sure you want to delete the project?"
 }

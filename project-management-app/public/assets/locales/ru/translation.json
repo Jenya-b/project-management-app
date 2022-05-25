@@ -39,5 +39,6 @@
   "projectName": "Название проекта",
   "projectDesc": "Описание проекта",
   "numberTask": "Количество задач",
-  "openProject": "Открыть проект"
+  "openProject": "Открыть проект",
+  "confirmDeleteProject": "Вы уверены, что хотите удалить проект?"
 }

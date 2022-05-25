@@ -7,7 +7,7 @@ import { ListItemProject } from '../../components/listItemProject';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { deleteProject, fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { fetchProjectById } from '../../../store/reducers/projects/projectByIdThunks';
 import { Loading } from '../../components/loading';
@@ -16,6 +16,8 @@ import { PrimaryBtn } from '../../components/button';
 import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
+import { BasicModal } from '../../components/modal';
+import { ConfirmationDialog } from '../../components/confirmationDialog';
 
 export const Main = () => {
   const { t } = useTranslation();
@@ -24,6 +26,8 @@ export const Main = () => {
   const { project, projectId } = useAppSelector((state) => state.projectByIdReducer);
   const dispatch = useAppDispatch();
   const { setProject, setProjectId } = projectByIdSlice.actions;
+  const [isModalActive, setModalActive] = useState<boolean>(false);
+  const [currentId, setCurrentId] = useState<string>('');
 
   useEffect(() => {
     getProjects();
@@ -54,7 +58,17 @@ export const Main = () => {
   };
 
   const deleteBoard = async (id: string) => {
-    dispatch(deleteProject({ id })).then(() => getProjects());
+    setCurrentId(id);
+    setModalActive(true);
+  };
+
+  const closeConfirmationDialog = () => {
+    setModalActive(false);
+  };
+  const confirmAction = () => {
+    dispatch(deleteProject({ id: currentId }))
+      .then(() => getProjects())
+      .then(() => setModalActive(false));
   };
 
   return (
@@ -99,6 +113,13 @@ export const Main = () => {
           </Grid>
         </Grid>
       </Container>
+      <BasicModal
+        isActive={isModalActive}
+        closeWindow={closeConfirmationDialog}
+        confirmAction={confirmAction}
+      >
+        <ConfirmationDialog title="titleModal" desc={t('confirmDeleteProject')} />
+      </BasicModal>
       <Loading isLoading={isLoading} />
     </div>
   );
