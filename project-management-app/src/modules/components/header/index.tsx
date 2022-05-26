@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
+  EDIT_PROFILE,
   DELETE_PROFILE,
   DEL_PROFILE_TEXT,
   LOG_OUT,
@@ -38,6 +39,7 @@ import { BasicModal } from '../modal';
 import { Boards } from '../../../utils/api/boards/boards';
 import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { logout } from '../../../store/reducers/login/loginSlice';
+import { USER_DATA_KEY, TOKEN_KEY } from '../../constants/constLocalStorage';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -51,7 +53,7 @@ export const Header = () => {
   const { setDialogActivity } = confirmationDialogSlice.actions;
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { homePath } = pathToPage;
+  const { homePath, editProfilePath } = pathToPage;
   const { token } = useAppSelector((state) => state.loginReducer);
 
   useEffect(() => {
@@ -106,6 +108,9 @@ export const Header = () => {
 
   const clickMenuItem = (item: string) => {
     switch (item) {
+      case EDIT_PROFILE:
+        navigate(editProfilePath);
+        break;
       case DELETE_PROFILE:
         setInfoDialog(DEL_PROFILE_TEXT);
         dispatch(setDialogActivity(true));
@@ -125,6 +130,8 @@ export const Header = () => {
   const deleteProfile = () => {};
 
   const signOut = () => {
+    localStorage.removeItem(USER_DATA_KEY);
+    localStorage.removeItem(TOKEN_KEY);
     dispatch(logout());
   };
 

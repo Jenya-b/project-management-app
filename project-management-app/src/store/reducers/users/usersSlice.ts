@@ -1,18 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UsersState } from './usersTypes';
-import { fetchUsers } from './usersThunks';
+import { fetchUsers, updateUser } from './usersThunks';
+import { makeArray } from '../../../utils/makeArray';
 
 const initialState: UsersState = {
   users: [],
   loading: false,
-  error: '',
+  errors: [],
+  currentUser: {
+    id: '',
+    name: '',
+    login: '',
+  },
 };
 
 const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    // standard reducer logic, with auto-generated action types per reducer
+    setCurrentUser(state, action) {
+      state.currentUser = action.payload;
+    },
+    clearErrors(state) {
+      state.errors = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
@@ -28,17 +39,34 @@ const usersSlice = createSlice({
         console.error(action.payload.message);
         switch (action.payload.statusCode) {
           case 401:
-            state.error = 'Your session has expired!';
+            state.errors = ['Your session has expired!'];
             break;
           default:
-            state.error = 'Wrong request';
+            state.errors = ['Wrong request'];
         }
       } else {
-        state.error = 'No answer from server. Please, try again later';
+        state.errors = ['No answer from server. Please, try again later'];
+        console.error(action.error);
+      }
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+      state.loading = false;
+      state.errors = [];
+    });
+    builder.addCase(updateUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.errors = makeArray(action.payload.message);
+      } else {
         console.error(action.error);
       }
     });
   },
 });
 
+export const { setCurrentUser, clearErrors } = usersSlice.actions;
 export default usersSlice.reducer;

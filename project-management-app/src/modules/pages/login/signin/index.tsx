@@ -9,6 +9,9 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { pathToPage } from '../../../constants/constRoutes';
+import { USER_DATA_KEY } from '../../../constants/constLocalStorage';
+import { TOKEN_KEY } from '../../../constants/constLocalStorage';
+import { setCurrentUser } from '../../../../store/reducers/users/usersSlice';
 
 export type FormValues = {
   login: string;
@@ -29,7 +32,10 @@ export const SignIn = () => {
 
   const submitForm = (data: FormValues) => {
     const { login, password } = data;
+    const userData = { id: '', login, name: '' };
+    localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
     dispatch(signin({ login, password }));
+    dispatch(setCurrentUser(userData));
   };
 
   useEffect(() => {
@@ -40,9 +46,10 @@ export const SignIn = () => {
 
   useEffect(() => {
     if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
       navigate(homePath);
     }
-  }, [token]);
+  }, [token, homePath, navigate]);
 
   if (token) {
     return <p>{t('userLoggedIn')}</p>;

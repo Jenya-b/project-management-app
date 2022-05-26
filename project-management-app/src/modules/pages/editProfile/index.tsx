@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useAppSelector } from '../../../../hooks/useAppSelector';
-import { useAppDispatch } from '../../../../hooks/useAppDispatch';
-import { signup } from '../../../../store/reducers/login/loginThunks';
-import { TextField, Button } from '@mui/material';
-import ErrorSnackbar from '../../../components/errorSnackbar/errorSnackbar';
-import { clearErrors, clearUserCreated } from '../../../../store/reducers/login/loginSlice';
+import { useEffect } from 'react';
+import { useAppSelector } from '../../../hooks/useAppSelector';
+import { useAppDispatch } from '../../../hooks/useAppDispatch';
+import { Container, TextField, Button } from '@mui/material';
+import { updateUser } from '../../../store/reducers/users/usersThunks';
+import ErrorSnackbar from '../../components/errorSnackbar/errorSnackbar';
+import { clearErrors } from '../../../store/reducers/users/usersSlice';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Loading } from '../../components/loading';
 
 export type FormValues = {
   name: string;
@@ -14,56 +15,38 @@ export type FormValues = {
   password: string;
 };
 
-export const SignUp = () => {
+export const EditProfile = () => {
   const { t } = useTranslation();
   const {
+    currentUser,
     loading,
-    newUser,
-    token,
     errors: serverErrors,
-  } = useAppSelector((state) => state.loginReducer);
+  } = useAppSelector((state) => state.usersReducer);
   const dispatch = useAppDispatch();
-  const [userCreated, setUserCreated] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({ defaultValues: { name: currentUser.name, login: currentUser.login } });
 
   const submitForm = (data: FormValues) => {
     const { name, login, password } = data;
-    dispatch(signup({ name, login, password }));
+    dispatch(updateUser({ id: currentUser.id, userData: { name, login, password } }));
   };
-
-  useEffect(() => {
-    setUserCreated(!!newUser.id);
-  }, [newUser]);
 
   useEffect(() => {
     return () => {
       dispatch(clearErrors());
-      dispatch(clearUserCreated());
     };
   }, [dispatch]);
 
-  if (token) {
-    return <p>{t('userLoggedIn')}</p>;
-  }
-
   return (
-    <div className="container">
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div>
-          {!!userCreated ? (
-            <div>
-              <p>New user created</p>
-              <p>Id: {newUser.id}</p>
-              <p>Name: {newUser.name}</p>
-              <p>Login: {newUser.login}</p>
-            </div>
-          ) : (
+    <div className="main">
+      <Container>
+        {loading ? (
+          <Loading isLoading={true} />
+        ) : (
+          <div>
             <form className="login-form" onSubmit={handleSubmit(submitForm)}>
               <div className="login-form__field">
                 <TextField
@@ -73,7 +56,9 @@ export const SignUp = () => {
                   sx={{ marginTop: '1em' }}
                   {...register('name', { required: 'nameFieldRequiredError' })}
                   error={!!errors.name}
-                  helperText={errors.name ? t(String(errors.name.message)) : t('nameFieldHelpText')}
+                  helperText={
+                    errors.name ? t(String(errors.name?.message)) : t('nameFieldHelpText')
+                  }
                 />
               </div>
               <div className="login-form__field">
@@ -86,7 +71,7 @@ export const SignUp = () => {
                   {...register('login', { required: 'loginFieldRequiredError' })}
                   error={!!errors.login}
                   helperText={
-                    errors.login ? t(String(errors.login.message)) : t('loginFieldSignUpHelpText')
+                    errors.login ? t(String(errors.login?.message)) : t('loginFieldSignUpHelpText')
                   }
                 />
               </div>
@@ -101,18 +86,18 @@ export const SignUp = () => {
                   error={!!errors.password}
                   helperText={
                     errors.password
-                      ? t(String(errors.password.message))
+                      ? t(String(errors.password?.message))
                       : t('passwordFieldSignUpHelpText')
                   }
                 />
               </div>
               <Button type="submit" sx={{ marginTop: '1em' }}>
-                {t('signUpFormButtonText')}
+                {t('update')}
               </Button>
             </form>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </Container>
       <ErrorSnackbar messages={serverErrors} />
     </div>
   );

@@ -35,7 +35,7 @@ export const signin = createAsyncThunk<
     state: RootState;
     rejectValue: ResponseError;
   }
->('login/signip', async (userData, thunkApi) => {
+>('login/signin', async (userData, thunkApi) => {
   const response = await Authorization.signin(userData);
   if (!response.ok) {
     const errorDetails: ResponseError = await response.json();

@@ -21,7 +21,7 @@ type TaskProps = {
 };
 export const Task = ({ id, title, order, description, columnId }: TaskProps) => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.loginReducer);
+  const { currentUser: user } = useAppSelector((state) => state.usersReducer);
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
 
   const onClick = (action: ModalAction) => {

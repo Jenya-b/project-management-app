@@ -5,6 +5,7 @@ export const pathToPage: { [index: string]: string } = {
   boardPath: 'board',
   signInPath: 'login/signin',
   signUpPath: 'login/signup',
+  editProfilePath: 'edit-profile',
   usersPath: 'users',
   welcomePath: 'welcome',
   notFoundPath: '*',

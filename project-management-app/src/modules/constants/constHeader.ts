@@ -2,7 +2,7 @@ export const navLinkTitle = ['homePage', 'projectPage'];
 
 export const settingsProfile = ['profile', 'editProfile', 'deleteProfile', 'logOut'];
 
-export const [, , DELETE_PROFILE, LOG_OUT] = settingsProfile;
+export const [, EDIT_PROFILE, DELETE_PROFILE, LOG_OUT] = settingsProfile;
 
 export const DEL_PROFILE_TEXT = 'deleteProfileModal';
 
