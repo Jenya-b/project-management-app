@@ -40,7 +40,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const columnTitle: React.RefObject<HTMLInputElement> = React.createRef();
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
-  const { user } = useAppSelector((state) => state.loginReducer);
+  const { currentUser: user } = useAppSelector((state) => state.usersReducer);
 
   const onConfirm = () => {
     dispatch(

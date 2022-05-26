@@ -5,9 +5,11 @@ import { Main } from '../../pages/main';
 import { Users } from '../../pages/users';
 import { NotFound } from '../../pages/notFound';
 import { Login } from '../../pages/login';
+import { EditProfile } from '../../pages/editProfile';
 import { RequireAuth } from './requiereAuth';
 import { Welcome } from '../../pages/welcome';
 import { Board } from '../../pages/board';
+import { RequireUser } from '../requireUser';
 import { PassedAuth } from './passedAuth';
 
 export const RouterWrapper = () => {
@@ -16,6 +18,7 @@ export const RouterWrapper = () => {
     loginPath,
     signInPath,
     signUpPath,
+    editProfilePath,
     usersPath,
     notFoundPath,
     welcomePath,
@@ -56,6 +59,16 @@ export const RouterWrapper = () => {
           element={
             <RequireAuth>
               <Board />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={editProfilePath}
+          element={
+            <RequireAuth>
+              <RequireUser>
+                <EditProfile />
+              </RequireUser>
             </RequireAuth>
           }
         />

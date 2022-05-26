@@ -4,10 +4,15 @@ import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { RootState } from '../../../store/store';
 import { fetchUsers } from '../../../store/reducers/users/usersThunks';
 import { useEffect } from 'react';
+import ErrorSnackbar from '../../components/errorSnackbar/errorSnackbar';
 import { Header } from '../../components/header';
 
 export const Users = () => {
-  const { users, loading, error } = useAppSelector((state: RootState) => state.usersReducer);
+  const {
+    users,
+    loading,
+    errors: serverErrors,
+  } = useAppSelector((state: RootState) => state.usersReducer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -17,8 +22,6 @@ export const Users = () => {
 
     getUsers().catch(console.error);
   }, [dispatch]);
-
-  if (error) return <main className="main">{error}</main>;
 
   if (loading) return <main className="main">Loading...</main>;
 
@@ -47,6 +50,7 @@ export const Users = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <ErrorSnackbar messages={serverErrors} />
       </main>
     </>
   );

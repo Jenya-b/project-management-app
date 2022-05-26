@@ -38,7 +38,7 @@ export const Board = () => {
     (state) => state.boardReducer
   );
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
-  const { user } = useAppSelector((state) => state.loginReducer);
+  const { currentUser: user } = useAppSelector((state) => state.usersReducer);
   const titleInput: React.RefObject<HTMLInputElement> = React.createRef();
   const taskDescription: React.RefObject<HTMLInputElement> = React.createRef();
   const navigate = useNavigate();

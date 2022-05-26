@@ -1,10 +1,8 @@
+import { UserData } from '../../../utils/api/users/usersTypes';
+
 export interface LoginState {
   token: string;
   loading: boolean;
-  user: {
-    id: string;
-    login: string;
-    name: string;
-  };
+  newUser: UserData;
   errors: string[];
 }
