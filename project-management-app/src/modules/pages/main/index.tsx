@@ -7,16 +7,17 @@ import { ListItemProject } from '../../components/listItemProject';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
-import { useEffect } from 'react';
-import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
+import { useEffect, useState } from 'react';
+import { deleteProject, fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { fetchProjectById } from '../../../store/reducers/projects/projectByIdThunks';
-import { Boards } from '../../../utils/api/boards/boards';
 import { Loading } from '../../components/loading';
 import { projectByIdSlice } from '../../../store/reducers/projects/projectByIdSlice';
 import { PrimaryBtn } from '../../components/button';
 import { Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
+import { BasicModal } from '../../components/modal';
+import { ConfirmationDialog } from '../../components/confirmationDialog';
 
 export const Main = () => {
   const { t } = useTranslation();
@@ -25,7 +26,8 @@ export const Main = () => {
   const { project, projectId } = useAppSelector((state) => state.projectByIdReducer);
   const dispatch = useAppDispatch();
   const { setProject, setProjectId } = projectByIdSlice.actions;
-  const { token } = useAppSelector((state) => state.loginReducer);
+  const [isModalActive, setModalActive] = useState<boolean>(false);
+  const [currentId, setCurrentId] = useState<string>('');
 
   useEffect(() => {
     getProjects();
@@ -56,10 +58,17 @@ export const Main = () => {
   };
 
   const deleteBoard = async (id: string) => {
-    if (token) {
-      await Boards.delete(id, token);
-    }
-    getProjects();
+    setCurrentId(id);
+    setModalActive(true);
+  };
+
+  const closeConfirmationDialog = () => {
+    setModalActive(false);
+  };
+  const confirmAction = () => {
+    dispatch(deleteProject({ id: currentId }))
+      .then(() => getProjects())
+      .then(() => setModalActive(false));
   };
 
   return (
@@ -94,13 +103,23 @@ export const Main = () => {
                 {t('projectName')}: <span>{project.title}</span>
               </div>
               <div className="project-desc">
+                {t('projectDesc')}: <span>{project.description}</span>
+              </div>
+              <div className="project-desc">
                 {t('numberTask')}: <span>{project.columns?.length}</span>
               </div>
             </Stack>
-            <PrimaryBtn variant="contained" text="Open project" onClick={openBoard} />
+            <PrimaryBtn variant="contained" text={t('openProject')} onClick={openBoard} />
           </Grid>
         </Grid>
       </Container>
+      <BasicModal
+        isActive={isModalActive}
+        closeWindow={closeConfirmationDialog}
+        confirmAction={confirmAction}
+      >
+        <ConfirmationDialog title="titleModal" desc={t('confirmDeleteProject')} />
+      </BasicModal>
       <Loading isLoading={isLoading} />
     </div>
   );

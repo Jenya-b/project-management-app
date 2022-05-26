@@ -36,8 +36,7 @@ import { ConfirmationDialog } from '../confirmationDialog';
 import { confirmationDialogSlice } from '../../../store/reducers/confirmationDialogSlice';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { BasicModal } from '../modal';
-import { Boards } from '../../../utils/api/boards/boards';
-import { fetchProjects } from '../../../store/reducers/projects/projectsThunks';
+import { createProject, fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { logout } from '../../../store/reducers/login/loginSlice';
 import { USER_DATA_KEY, TOKEN_KEY } from '../../constants/constLocalStorage';
 
@@ -47,6 +46,7 @@ export const Header = () => {
   const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(true);
   const [infoDialog, setInfoDialog] = useState<string>('');
   const [newProjectTitle, setNewProjectTitle] = useState<string>('');
+  const [newProjectDesc, setNewProjectDesc] = useState<string>('');
   const dispatch = useAppDispatch();
   const { isModalActive } = useAppSelector((state) => state.confirmationDialog);
   const { setLanguage } = langInterfaceSlice.actions;
@@ -54,7 +54,6 @@ export const Header = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { homePath, editProfilePath } = pathToPage;
-  const { token } = useAppSelector((state) => state.loginReducer);
 
   useEffect(() => {
     dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
@@ -76,6 +75,11 @@ export const Header = () => {
   const handleProjectTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setNewProjectTitle(value);
+  };
+
+  const handleProjectDescChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setNewProjectDesc(value);
   };
 
   const handleCloseNavMenu = () => {
@@ -140,10 +144,10 @@ export const Header = () => {
   };
 
   const addNewProject = async () => {
-    if (token) {
-      await Boards.createBoard({ title: newProjectTitle }, token);
-    }
-    getProjects();
+    dispatch(
+      createProject({ projectData: { title: newProjectTitle, description: newProjectDesc } })
+    ).then(() => getProjects());
+
     navigate(homePath);
   };
 
@@ -316,12 +320,20 @@ export const Header = () => {
             <Typography variant="h6" component="h2">
               {t('newProjectTypography')}
             </Typography>
-            <TextField
-              placeholder={t('projectName')}
-              sx={{ marginBottom: 4, marginTop: 4 }}
-              value={newProjectTitle}
-              onChange={handleProjectTitleChange}
-            />
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <TextField
+                placeholder={t('projectName')}
+                sx={{ marginBottom: 4, marginTop: 4 }}
+                value={newProjectTitle}
+                onChange={handleProjectTitleChange}
+              />
+              <TextField
+                placeholder={t('projectDesc')}
+                sx={{ marginBottom: 4 }}
+                value={newProjectDesc}
+                onChange={handleProjectDescChange}
+              />
+            </Box>
           </>
         ) : (
           <ConfirmationDialog title="titleModal" desc={infoDialog} />
