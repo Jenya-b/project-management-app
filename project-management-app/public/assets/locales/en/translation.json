@@ -38,7 +38,7 @@
   "newProjectTypography": "Add new project",
   "projectName": "Project name",
   "projectDesc": "Project description",
-  "numberTask": "Number of tasks",
+  "numberColumns": "Number of columns",
   "openProject": "Open project",
   "confirmDeleteProject": "Are you sure you want to delete the project?",
   "gotoMainPage": "Go to Main Page"

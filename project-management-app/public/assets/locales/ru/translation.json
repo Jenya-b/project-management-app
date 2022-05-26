@@ -38,7 +38,7 @@
   "newProjectTypography": "Создать новый проект",
   "projectName": "Название проекта",
   "projectDesc": "Описание проекта",
-  "numberTask": "Количество задач",
+  "numberColumns": "Количество колонок",
   "openProject": "Открыть проект",
   "confirmDeleteProject": "Вы уверены, что хотите удалить проект?",
   "gotoMainPage": "Перейти на главную"
