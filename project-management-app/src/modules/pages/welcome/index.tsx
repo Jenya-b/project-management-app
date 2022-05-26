@@ -11,6 +11,8 @@ import { useAppSelector } from '../../../hooks/useAppSelector';
 import { RootState } from '../../../store/store';
 import { pathToPage } from '../../constants/constRoutes';
 import { useTranslation } from 'react-i18next';
+import { slideWrapper } from '../../components/slide/slide';
+import { v4 } from 'uuid';
 
 export const Welcome = () => {
   const { token } = useAppSelector((state: RootState) => state.loginReducer);
@@ -19,13 +21,25 @@ export const Welcome = () => {
 
   return (
     <div className="container">
-      <div className="title-container">
-        <h1 className="title">
-          Project <br />
-          Management
-          <br /> &emsp;&emsp;&emsp;&nbsp;&nbsp;App
-        </h1>
-      </div>
+      <Swiper
+        className="title-container"
+        style={{ width: '50%' }}
+        direction="vertical"
+        loop={true}
+        autoplay={{
+          delay: 4500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
+        speed={3500}
+        modules={[Autoplay, EffectFade]}
+      >
+        {slideWrapper.map((slide) => (
+          <SwiperSlide className="swiper-slide-desc" key={v4()}>
+            {slide}
+          </SwiperSlide>
+        ))}
+      </Swiper>
       <div className="btn-container">
         {token ? (
           <Link to={homePath}>
@@ -46,7 +60,7 @@ export const Welcome = () => {
         effect={'fade'}
         centeredSlides={true}
         autoplay={{
-          delay: 2500,
+          delay: 4000,
           disableOnInteraction: false,
         }}
         pagination={{

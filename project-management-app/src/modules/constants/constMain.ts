@@ -15,3 +15,21 @@ export const buttonDescription = [
     link: '/login/signup',
   },
 ];
+
+export const commandSlideData = [
+  {
+    img: 'https://avatars.githubusercontent.com/u/76208126?v=4',
+    developer: 'borisevich',
+    address: 'minsk',
+  },
+  {
+    img: 'https://avatars.githubusercontent.com/u/26676430?v=4',
+    developer: 'kolobov',
+    address: 'piter',
+  },
+  {
+    img: 'https://avatars.githubusercontent.com/u/87133349?v=4',
+    developer: 'kardash',
+    address: 'moscow',
+  },
+];

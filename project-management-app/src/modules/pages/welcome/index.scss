@@ -1,14 +1,16 @@
+#root {
+  height: 100vh;
+}
 .container {
   position: relative;
+  height: 100%;
 
   .title-container {
     position: absolute;
-    display: flex;
-    height: 100vh;
-    align-items: center;
+    height: 100%;
+    width: 50%;
     font-size: 8em;
     z-index: 10;
-    line-height: 1.5em;
     @media (max-width: 1200px) {
       font-size: 5em;
     }
@@ -32,7 +34,7 @@
 
   .slide {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -46,6 +48,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .swiper-slide-desc {
+    justify-content: left;
+    padding-left: 5em;
+    padding-right: 6em;
+    font-size: 20px;
   }
 
   .swiper-slide img {
