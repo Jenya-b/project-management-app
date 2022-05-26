@@ -26,7 +26,6 @@ export const projectByIdSlice = createSlice({
   reducers: {
     setProjectId(state, action) {
       state.projectId = action.payload;
-      console.log(action.payload);
     },
     setProject(state, action) {
       state.project = action.payload;

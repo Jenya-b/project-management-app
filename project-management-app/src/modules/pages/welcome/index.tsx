@@ -7,9 +7,15 @@ import './index.scss';
 import { PrimaryBtn } from '../../components/button/index';
 import { buttonDescription, backgroundImages } from '../../constants/constMain';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../../hooks/useAppSelector';
+import { RootState } from '../../../store/store';
+import { pathToPage } from '../../constants/constRoutes';
+import { useTranslation } from 'react-i18next';
 
 export const Welcome = () => {
-  const handleClick = () => {};
+  const { token } = useAppSelector((state: RootState) => state.loginReducer);
+  const { homePath } = pathToPage;
+  const { t } = useTranslation();
 
   return (
     <div className="container">
@@ -21,11 +27,19 @@ export const Welcome = () => {
         </h1>
       </div>
       <div className="btn-container">
-        {buttonDescription.map((btn) => (
-          <Link key={btn.label} to={btn.link}>
-            <PrimaryBtn variant="contained" text={btn.label} onClick={handleClick} />
+        {token ? (
+          <Link to={homePath}>
+            <PrimaryBtn variant="contained" text={t('gotoMainPage')} />
           </Link>
-        ))}
+        ) : (
+          buttonDescription.map((btn) => {
+            return (
+              <Link key={btn.label} to={btn.link}>
+                <PrimaryBtn variant="contained" text={btn.label} />
+              </Link>
+            );
+          })
+        )}
       </div>
       <Swiper
         spaceBetween={30}
