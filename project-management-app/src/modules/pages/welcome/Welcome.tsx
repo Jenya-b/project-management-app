@@ -22,8 +22,7 @@ export const Welcome = () => {
   return (
     <div className="container">
       <Swiper
-        className="title-container"
-        style={{ width: '50%' }}
+        className="swiper-info"
         direction="vertical"
         loop={true}
         autoplay={{
@@ -56,6 +55,7 @@ export const Welcome = () => {
         )}
       </div>
       <Swiper
+        className="swiper-image"
         spaceBetween={30}
         effect={'fade'}
         centeredSlides={true}
