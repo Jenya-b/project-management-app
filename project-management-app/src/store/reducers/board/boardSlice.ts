@@ -27,6 +27,8 @@ type BoardInitialState = {
   taskData: TaskType | null;
   columnData: ColumnType | null;
   modalAction: ModalAction;
+  isTaskShown: boolean;
+  dropResult: DropResult | null;
   isModalFormOpen: boolean;
 };
 
@@ -37,6 +39,8 @@ const initialState: BoardInitialState = {
   taskData: null,
   columnData: null,
   modalAction: 'createColumn',
+  isTaskShown: false,
+  dropResult: null,
   isModalFormOpen: false,
 };
 
@@ -60,9 +64,14 @@ export const boardSlice = createSlice({
       state.columnData = action.payload;
     },
 
+    setIsTaskShown(state, action: PayloadAction<boolean>) {
+      state.isTaskShown = action.payload;
+    },
+
     setmodalAction(state, action: PayloadAction<ModalAction>) {
       state.modalAction = action.payload;
     },
+
     changeTaskOrder(state, action: PayloadAction<DropResult>) {
       const prevColumn = state.board.columns.find(
         (item) => item.id === action.payload.source.droppableId
@@ -84,6 +93,7 @@ export const boardSlice = createSlice({
           currentColumn.tasks[i].order = i + 1;
         }
       }
+      state.dropResult = action.payload;
     },
     changeColumnOrder(state, action: PayloadAction<DropResult>) {
       const prevOrder = action.payload.source.index;
@@ -99,6 +109,7 @@ export const boardSlice = createSlice({
       for (let i = start; i <= end; i++) {
         state.board.columns[i].order = i + 1;
       }
+      state.dropResult = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -221,5 +232,6 @@ export const {
   setIsModalFormOpen,
   changeColumnOrder,
   changeTaskOrder,
+  setIsTaskShown,
 } = boardSlice.actions;
 export default boardSlice.reducer;

@@ -12,14 +12,12 @@ import {
 } from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
 import {
   AppBar,
   Avatar,
   Box,
   FormLabel,
   IconButton,
-  InputBase,
   Menu,
   MenuItem,
   TextField,
@@ -39,11 +37,13 @@ import { BasicModal } from '../modal';
 import { createProject, fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { logout } from '../../../store/reducers/login/loginSlice';
 import { USER_DATA_KEY, TOKEN_KEY } from '../../constants/constLocalStorage';
+import { TEXT_FIELD_WIDTH } from '../../constants/constGlobal';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(true);
+  const { language } = useAppSelector((state) => state.langInterfaceReducer);
+  const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(language === 'en');
   const [infoDialog, setInfoDialog] = useState<string>('');
   const [newProjectTitle, setNewProjectTitle] = useState<string>('');
   const [newProjectDesc, setNewProjectDesc] = useState<string>('');
@@ -225,23 +225,6 @@ export const Header = () => {
                 <AddIcon />
               </IconButton>
             </Tooltip>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                border: 'solid black 1px',
-                borderRadius: '20px',
-              }}
-            >
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder={t('search')}
-                inputProps={{ 'aria-label': 'search' }}
-              />
-              <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </Box>
             <FormLabel id="language-switcher">
               <input
                 type="checkbox"
@@ -321,15 +304,23 @@ export const Header = () => {
               {t('newProjectTypography')}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography sx={{ mt: 2 }} variant="body1" component="p">
+                {t('projectName')}
+              </Typography>
               <TextField
-                placeholder={t('projectName')}
-                sx={{ marginBottom: 4, marginTop: 4 }}
+                placeholder={t('title')}
+                sx={{ mb: 2, mt: 1, width: TEXT_FIELD_WIDTH }}
                 value={newProjectTitle}
                 onChange={handleProjectTitleChange}
               />
+              <Typography sx={{ mt: 2 }} variant="body1" component="p">
+                {t('projectDesc')}
+              </Typography>
               <TextField
-                placeholder={t('projectDesc')}
-                sx={{ marginBottom: 4 }}
+                placeholder={t('description')}
+                multiline
+                rows={5}
+                sx={{ mb: 4, mt: 1, width: '17.5rem' }}
                 value={newProjectDesc}
                 onChange={handleProjectDescChange}
               />

@@ -41,5 +41,22 @@
   "numberColumns": "Количество колонок",
   "openProject": "Открыть проект",
   "confirmDeleteProject": "Вы уверены, что хотите удалить проект?",
-  "gotoMainPage": "Перейти на главную"
+  "gotoMainPage": "Перейти на главную",
+  "createColumnTypography": "Создать новую колонку",
+  "columnTitle": "Название колонки",
+  "createTaskTypography": "Созать новую задачу",
+  "updateTaskTypography": "Изменить задачу",
+  "taskTitle": "Название задачи",
+  "taskDesc": "Описание задачи",
+  "boardPageTitle": "Доска проекта",
+  "fullscreen": "фулскрин",
+  "goBack": "назад",
+  "addTaskButton": "Добавить задачу",
+  "addColumnButton": "Добавить колонку",
+  "deleteTaskButton": "Удалить задачу",
+  "updateTaskButton": "Редактировать задачу",
+  "deleteColumnButton": "Удалить колонку",
+  "updateColumnButton": "Редактировать колонку",
+  "title": "Название",
+  "description": "Описание"
 }
