@@ -2,21 +2,49 @@
   height: 5rem;
   background-color: #ffffff;
   display: flex;
-  justify-content: end;
   align-items: center;
   color: #000000;
   border-top: solid 2px rgba(0, 0, 0, 0.1);
-  .footer__content {
+  &__content {
+    width: 100%;
     display: flex;
-    width: calc(50% + 1.5rem);
+    align-items: center;
     justify-content: space-between;
+    padding: 0 2.3rem;
   }
-  .footer__date {
+  &__img {
+    width: 5.5rem;
+    height: 2rem;
+    background-size: cover;
+  }
+  &__date {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     width: 3rem;
   }
-  .contacts {
+  &__contacts {
     display: flex;
-    margin-right: 2.3rem;
     column-gap: 1.8rem;
+  }
+}
+
+@media (max-width: 750px) {
+  .footer {
+    &__content {
+      padding: 0 1rem;
+    }
+    &__contacts {
+      column-gap: 1.2rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .footer {
+    &__contacts {
+      flex-direction: column;
+      row-gap: 0.3rem;
+    }
   }
 }
