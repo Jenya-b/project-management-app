@@ -49,6 +49,13 @@ export const Main = () => {
     dispatch(fetchProjects());
   };
 
+  const handleClickList = (id: string) => {
+    getProjectDescription(id);
+    if (window.innerWidth < 900) {
+      navigate('/board');
+    }
+  };
+
   const getProjectDescription = async (id: string) => {
     dispatch(setProjectId(id));
     dispatch(fetchProjectById({ id }));
@@ -78,8 +85,8 @@ export const Main = () => {
       <div className="main">
         <Container>
           <Grid container spacing={14}>
-            <Grid item xs={12} md={6}>
-              <Typography sx={{ mt: 4, mb: 2, fontSize: '1.8rem' }} variant="h6">
+            <Grid item xs={12} md={6} className="project-desc-list">
+              <Typography className="project-title" variant="h6">
                 {t('ListOfProjects')}
               </Typography>
               <Box>
@@ -90,29 +97,31 @@ export const Main = () => {
                       id={id}
                       title={title}
                       activeProjectId={projectId}
-                      openBoard={() => getProjectDescription(id)}
+                      openBoard={() => handleClickList(id)}
                       deleteBoard={() => deleteBoard(id)}
                     />
                   ))}
                 </List>
               </Box>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography sx={{ mt: 4, mb: 2, fontSize: '1.8rem' }} variant="h6">
-                {t('projectDesc')}
-              </Typography>
-              <Stack spacing={2} sx={{ marginBottom: 4 }}>
-                <div className="project-desc">
-                  {t('projectName')}: <span>{project.title}</span>
-                </div>
-                <div className="project-desc">
-                  {t('projectDesc')}: <span>{project.description}</span>
-                </div>
-                <div className="project-desc">
-                  {t('numberColumns')}: <span>{project.columns?.length}</span>
-                </div>
-              </Stack>
-              <PrimaryBtn variant="contained" text={t('openProject')} onClick={openBoard} />
+            <Grid item xs={12} md={6} className="project-desc-wrapp">
+              <Box className="project-sticky">
+                <Typography className="project-title" variant="h6">
+                  {t('projectDesc')}
+                </Typography>
+                <Stack spacing={2} sx={{ marginBottom: 4 }}>
+                  <div className="project-desc">
+                    {t('projectName')}: <span>{project.title}</span>
+                  </div>
+                  <div className="project-desc">
+                    {t('projectDesc')}: <span>{project.description}</span>
+                  </div>
+                  <div className="project-desc">
+                    {t('numberColumns')}: <span>{project.columns?.length}</span>
+                  </div>
+                </Stack>
+                <PrimaryBtn variant="contained" text={t('openProject')} onClick={openBoard} />
+              </Box>
             </Grid>
           </Grid>
         </Container>
