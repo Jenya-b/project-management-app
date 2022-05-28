@@ -41,5 +41,7 @@
   "numberColumns": "Количество колонок",
   "openProject": "Открыть проект",
   "confirmDeleteProject": "Вы уверены, что хотите удалить проект?",
-  "gotoMainPage": "Перейти на главную"
+  "gotoMainPage": "Перейти на главную",
+  "newUserCreated": "Новый пользователь создан",
+  "id": "ID"
 }
