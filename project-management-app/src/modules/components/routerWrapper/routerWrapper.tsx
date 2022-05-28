@@ -1,16 +1,16 @@
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from '../Layout';
 import { pathToPage } from '../../constants/constRoutes';
-import { Main } from '../../pages/main';
-import { Users } from '../../pages/users';
-import { NotFound } from '../../pages/notFound';
-import { Login } from '../../pages/login';
-import { EditProfile } from '../../pages/editProfile';
-import { RequireAuth } from './requiereAuth';
-import { Welcome } from '../../pages/welcome';
-import { Board } from '../../pages/board';
-import { RequireUser } from '../requireUser';
-import { PassedAuth } from './passedAuth';
+import { Loading } from '../loading';
+
+const BoardPage = React.lazy(() => import('../../pages/board'));
+const EditProfilePage = React.lazy(() => import('../../pages/editProfile'));
+const LoginPage = React.lazy(() => import('../../pages/login'));
+const MainPage = React.lazy(() => import('../../pages/main'));
+const NotFoundPage = React.lazy(() => import('../../pages/notFound'));
+const UsersPage = React.lazy(() => import('../../pages/users'));
+const WelcomePage = React.lazy(() => import('../../pages/welcome'));
 
 export const RouterWrapper = () => {
   const {
@@ -31,56 +31,75 @@ export const RouterWrapper = () => {
         <Route
           index
           element={
-            <RequireAuth>
-              <Main />
-            </RequireAuth>
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <MainPage />
+            </React.Suspense>
           }
         />
-        <Route path={loginPath} element={<Login />} />
+        <Route
+          path={loginPath}
+          element={
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <LoginPage />
+            </React.Suspense>
+          }
+        />
         <Route
           path={signInPath}
           element={
-            <PassedAuth>
-              <Login tab="signin" />
-            </PassedAuth>
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <LoginPage tab="signin" />
+            </React.Suspense>
           }
         />
         <Route
           path={signUpPath}
           element={
-            <PassedAuth>
-              <Login tab="signup" />
-            </PassedAuth>
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <LoginPage tab="signup" />
+            </React.Suspense>
           }
         />
-        <Route path={welcomePath} element={<Welcome />} />
+        <Route
+          path={welcomePath}
+          element={
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <WelcomePage />
+            </React.Suspense>
+          }
+        />
         <Route
           path={boardPath}
           element={
-            <RequireAuth>
-              <Board />
-            </RequireAuth>
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <BoardPage />
+            </React.Suspense>
           }
         />
         <Route
           path={editProfilePath}
           element={
-            <RequireAuth>
-              <RequireUser>
-                <EditProfile />
-              </RequireUser>
-            </RequireAuth>
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <EditProfilePage />
+            </React.Suspense>
           }
         />
         <Route
           path={usersPath}
           element={
-            <RequireAuth>
-              <Users />
-            </RequireAuth>
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <UsersPage />
+            </React.Suspense>
           }
         />
-        <Route path={notFoundPath} element={<NotFound />} />
+        <Route
+          path={notFoundPath}
+          element={
+            <React.Suspense fallback={<Loading isLoading={true} />}>
+              <NotFoundPage />
+            </React.Suspense>
+          }
+        />
       </Route>
     </Routes>
   );

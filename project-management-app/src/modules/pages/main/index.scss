@@ -6,3 +6,23 @@
     text-transform: uppercase;
   }
 }
+
+.project-title {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.project-sticky {
+  position: sticky;
+  top: 6rem;
+}
+
+@media (max-width: 899px) {
+  .main {
+    padding: 1.5rem 0;
+  }
+  .project-desc-wrapp {
+    display: none;
+  }
+}

@@ -58,5 +58,16 @@
   "deleteColumnButton": "Delete column",
   "updateColumnButton": "Edit column",
   "title": "Title",
-  "description": "Description"
+  "description": "Description",
+  "projectManagementApp": "Project Management App",
+  "aboutTheProject": "An application that helps an individual in a team or group of developers achieve their goals",
+  "courseReact": "Online course Development with React",
+  "courseReactTitle": "Free course from The Rolling Scopes community",
+  "forWhomCourseReact": "The course is intended for RS School students who have passed RS School stage#2, as well as for new students who have knowledge and practical experience in using the following technologies and tools: JavaScript, TypeScript, Git, NPM, CSS3 / HTML5, REST API",
+  "borisevich": "Evgeny Borisevich, Team Lead",
+  "kolobov": "Konstantin Kolobov, Developer",
+  "kardash": "Milana Kardash, Developer",
+  "minsk": "Belarus, Minsk",
+  "moscow": "Russia, Moscow",
+  "piter": "Russia, Saint Petersburg"
 }
