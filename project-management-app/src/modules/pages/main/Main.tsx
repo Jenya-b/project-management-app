@@ -19,6 +19,7 @@ import './index.scss';
 import { BasicModal } from '../../components/modal';
 import { ConfirmationDialog } from '../../components/confirmationDialog';
 import { Header } from '../../components/header';
+import { pathToPage } from '../../constants/constRoutes';
 
 export const Main = () => {
   const { t } = useTranslation();
@@ -29,6 +30,7 @@ export const Main = () => {
   const { setProject, setProjectId } = projectByIdSlice.actions;
   const [isModalActive, setModalActive] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<string>('');
+  const { boardPath } = pathToPage;
 
   useEffect(() => {
     getProjects();
@@ -52,7 +54,7 @@ export const Main = () => {
   const handleClickList = (id: string) => {
     getProjectDescription(id);
     if (window.innerWidth < 900) {
-      navigate('/board');
+      navigate(boardPath);
     }
   };
 

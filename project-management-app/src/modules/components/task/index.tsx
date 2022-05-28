@@ -1,11 +1,13 @@
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import {
   setTaskData,
   setIsModalFormOpen,
   setmodalAction,
+  setIsTaskShown,
 } from '../../../store/reducers/board/boardSlice';
 import { ModalAction } from '../../../modules/types';
 import { Typography, IconButton, Tooltip, Card, CardContent, CardActions } from '@mui/material';
@@ -17,15 +19,14 @@ type TaskProps = {
   order: number;
   description: string;
   columnId: string;
-  index: number;
+  userId: string;
 };
-export const Task = ({ id, title, order, description, columnId }: TaskProps) => {
+export const Task = ({ id, title, order, description, columnId, userId }: TaskProps) => {
   const dispatch = useAppDispatch();
-  const { currentUser: user } = useAppSelector((state) => state.usersReducer);
+  const { t } = useTranslation();
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
 
-  const onClick = (action: ModalAction) => {
-    dispatch(setmodalAction(action));
+  const setData = () => {
     dispatch(
       setTaskData({
         title,
@@ -33,11 +34,21 @@ export const Task = ({ id, title, order, description, columnId }: TaskProps) => 
         order,
         columnId,
         boardId: projectId,
-        userId: user.id,
+        userId,
         id,
       })
     );
+  };
+
+  const onClick = (action: ModalAction) => {
+    dispatch(setmodalAction(action));
+    setData();
     dispatch(setIsModalFormOpen(true));
+  };
+
+  const showTask = () => {
+    setData();
+    dispatch(setIsTaskShown(true));
   };
 
   return (
@@ -48,14 +59,19 @@ export const Task = ({ id, title, order, description, columnId }: TaskProps) => 
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           sx={{
-            width: '23rem',
-            mx: '1rem',
+            width: { xs: '11rem', md: '22rem' },
+            ml: '1.5rem',
             mb: '1.5rem',
             position: 'relative',
           }}
         >
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h5" sx={{ pr: '5rem' }}>
+          <CardContent onClick={showTask}>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="h5"
+              sx={{ pr: { xs: '0', md: '5rem' }, pt: { xs: '2rem', md: '0' } }}
+            >
               {title}
             </Typography>
             <Typography
@@ -64,16 +80,16 @@ export const Task = ({ id, title, order, description, columnId }: TaskProps) => 
               color="text.secondary"
               sx={{ fontSize: '1.1rem' }}
             >
-              {description}
+              {description.length > 100 ? `${description.slice(0, 100)}...` : description}
             </Typography>
           </CardContent>
           <CardActions disableSpacing sx={{ position: 'absolute', right: '0', top: '0' }}>
-            <Tooltip title="edit task" onClick={() => onClick('updateTask')}>
+            <Tooltip title={t('updateTaskButton')} onClick={() => onClick('updateTask')}>
               <IconButton aria-label="edit task">
                 <EditIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="delete task">
+            <Tooltip title={t('deleteTaskButton')}>
               <IconButton aria-label="delete task" onClick={() => onClick('deleteTask')}>
                 <ClearIcon />
               </IconButton>

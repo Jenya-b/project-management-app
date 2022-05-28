@@ -2,6 +2,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { TaskType } from '../../types';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
@@ -37,6 +38,7 @@ type ColumnProps = {
 
 export const Column = ({ id, title, order, tasks }: ColumnProps) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const columnTitle: React.RefObject<HTMLInputElement> = React.createRef();
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
@@ -85,7 +87,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
             {...provided.draggableProps}
             ref={provided.innerRef}
             sx={{
-              width: '25rem',
+              width: { xs: '14rem', md: '25rem' },
               height: 'calc(100vh - 26rem)',
               backgroundColor: COLUMN_COLOR,
               display: 'flex',
@@ -93,7 +95,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
               alignItems: 'center',
               position: 'relative',
               pb: '2.3rem',
-              mr: '2rem',
+              mr: { xs: '1rem', md: '2rem' },
             }}
           >
             <Box
@@ -107,7 +109,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
                 backgroundColor: PRIMARY_COLOR,
               }}
             >
-              <Tooltip title="delete column">
+              <Tooltip title={t('deleteColumnButton')}>
                 <IconButton aria-label="delete column" sx={{ color: '#ffffff' }} onClick={del}>
                   <ClearIcon />
                 </IconButton>
@@ -153,7 +155,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
                     backgroundColor: snapshot.isDraggingOver ? 'rgba(48, 38, 185, .1)' : 'none',
                   }}
                 >
-                  {tasks.map((task, index) => (
+                  {tasks.map((task) => (
                     <Task
                       key={task.id}
                       id={task.id}
@@ -161,7 +163,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
                       order={task.order}
                       description={task.description}
                       columnId={id}
-                      index={index}
+                      userId={task.userId}
                     />
                   ))}
                 </List>
@@ -174,7 +176,7 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
               sx={{ position: 'absolute', bottom: '0', left: '0', color: PRIMARY_COLOR }}
               startIcon={<AddIcon />}
             >
-              Add Card
+              {t('addTaskButton')}
             </Button>
           </Box>
         </Box>
