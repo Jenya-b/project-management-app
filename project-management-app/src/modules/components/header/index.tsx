@@ -20,7 +20,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  TextField,
   Toolbar,
   Tooltip,
   Typography,
@@ -34,10 +33,9 @@ import { ConfirmationDialog } from '../confirmationDialog';
 import { confirmationDialogSlice } from '../../../store/reducers/confirmationDialogSlice';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { BasicModal } from '../modal';
-import { createProject, fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { logout } from '../../../store/reducers/login/loginSlice';
 import { USER_DATA_KEY, TOKEN_KEY } from '../../constants/constLocalStorage';
-import { TEXT_FIELD_WIDTH } from '../../constants/constGlobal';
+import { NewProjectModal } from './newProjectModal';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -45,15 +43,13 @@ export const Header = () => {
   const { language } = useAppSelector((state) => state.langInterfaceReducer);
   const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(language === 'en');
   const [infoDialog, setInfoDialog] = useState<string>('');
-  const [newProjectTitle, setNewProjectTitle] = useState<string>('');
-  const [newProjectDesc, setNewProjectDesc] = useState<string>('');
   const dispatch = useAppDispatch();
   const { isModalActive } = useAppSelector((state) => state.confirmationDialog);
   const { setLanguage } = langInterfaceSlice.actions;
   const { setDialogActivity } = confirmationDialogSlice.actions;
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { homePath, editProfilePath } = pathToPage;
+  const { editProfilePath } = pathToPage;
 
   useEffect(() => {
     dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
@@ -70,16 +66,6 @@ export const Header = () => {
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleProjectTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setNewProjectTitle(value);
-  };
-
-  const handleProjectDescChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setNewProjectDesc(value);
   };
 
   const handleCloseNavMenu = () => {
@@ -101,9 +87,6 @@ export const Header = () => {
         break;
       case LOG_OUT_TEXT:
         signOut();
-        break;
-      case NEW_PROJECT:
-        addNewProject();
         break;
     }
     closeConfirmationDialog();
@@ -137,18 +120,6 @@ export const Header = () => {
     localStorage.removeItem(USER_DATA_KEY);
     localStorage.removeItem(TOKEN_KEY);
     dispatch(logout());
-  };
-
-  const getProjects = async () => {
-    dispatch(fetchProjects());
-  };
-
-  const addNewProject = async () => {
-    dispatch(
-      createProject({ projectData: { title: newProjectTitle, description: newProjectDesc } })
-    ).then(() => getProjects());
-
-    navigate(homePath);
   };
 
   return (
@@ -293,43 +264,21 @@ export const Header = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      <BasicModal
-        isActive={isModalActive}
-        closeWindow={closeConfirmationDialog}
-        confirmAction={confirmAction}
-      >
-        {infoDialog === NEW_PROJECT ? (
-          <>
-            <Typography variant="h6" component="h2">
-              {t('newProjectTypography')}
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography sx={{ mt: 2 }} variant="body1" component="p">
-                {t('projectName')}
-              </Typography>
-              <TextField
-                placeholder={t('title')}
-                sx={{ mb: 2, mt: 1, width: TEXT_FIELD_WIDTH }}
-                value={newProjectTitle}
-                onChange={handleProjectTitleChange}
-              />
-              <Typography sx={{ mt: 2 }} variant="body1" component="p">
-                {t('projectDesc')}
-              </Typography>
-              <TextField
-                placeholder={t('description')}
-                multiline
-                rows={5}
-                sx={{ mb: 4, mt: 1, width: '17.5rem' }}
-                value={newProjectDesc}
-                onChange={handleProjectDescChange}
-              />
-            </Box>
-          </>
-        ) : (
+      {infoDialog === NEW_PROJECT ? (
+        <NewProjectModal
+          isModalActive={isModalActive}
+          closeConfirmationDialog={closeConfirmationDialog}
+          confirmAction={confirmAction}
+        />
+      ) : (
+        <BasicModal
+          isActive={isModalActive}
+          closeWindow={closeConfirmationDialog}
+          confirmAction={confirmAction}
+        >
           <ConfirmationDialog title="titleModal" desc={infoDialog} />
-        )}
-      </BasicModal>
+        </BasicModal>
+      )}
     </>
   );
 };
