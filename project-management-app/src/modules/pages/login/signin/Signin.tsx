@@ -7,10 +7,8 @@ import ErrorSnackbar from '../../../components/errorSnackbar/errorSnackbar';
 import { clearErrors } from '../../../../store/reducers/login/loginSlice';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { pathToPage } from '../../../constants/constRoutes';
 import { USER_DATA_KEY } from '../../../constants/constLocalStorage';
-import { TOKEN_KEY } from '../../../constants/constLocalStorage';
+
 import { setCurrentUser } from '../../../../store/reducers/users/usersSlice';
 import { Loading } from '../../../components/loading';
 
@@ -28,8 +26,6 @@ export const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
-  const navigate = useNavigate();
-  const { homePath } = pathToPage;
 
   const submitForm = (data: FormValues) => {
     const { login, password } = data;
@@ -45,62 +41,42 @@ export const SignIn = () => {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem(TOKEN_KEY, token);
-      navigate(homePath);
-    }
-  }, [token, homePath, navigate]);
-
   if (token) {
     return <p>{t('userLoggedIn')}</p>;
   }
 
-  return (
-    <div className="container">
-      {loading ? (
-        <Loading isLoading={true} />
-      ) : (
-        <div>
-          <form className="login-form" onSubmit={handleSubmit(submitForm)}>
-            <div className="login-form__field">
-              <TextField
-                label={t('loginFieldLabel')}
-                className="login-form__field-input"
-                type="text"
-                autoComplete="userlogin"
-                sx={{ marginTop: '1em' }}
-                {...register('login', { required: 'loginFieldRequiredError' })}
-                error={!!errors.login}
-                helperText={
-                  errors.login ? t(String(errors.login.message)) : t('loginFieldSignInHelpText')
-                }
-              />
-            </div>
-            <div className="login-form__field">
-              <TextField
-                label={t('passwordFieldLabel')}
-                className="login-form__field-input"
-                type="password"
-                autoComplete="current-password"
-                sx={{ marginTop: '1em' }}
-                {...register('password', { required: 'passwordFieldRequiredError' })}
-                error={!!errors.password}
-                helperText={
-                  errors.password
-                    ? t(String(errors.password.message))
-                    : t('passwordFieldSignInHelpText')
-                }
-              />
-            </div>
+  if (loading) {
+    return <Loading isLoading={true} />;
+  }
 
-            <Button type="submit" sx={{ marginTop: '1em' }}>
-              {t('signInFormButtonText')}
-            </Button>
-          </form>
-        </div>
-      )}
+  return (
+    <form className="login-form" onSubmit={handleSubmit(submitForm)}>
+      <TextField
+        label={t('loginFieldLabel')}
+        className="login-form__field-input"
+        type="text"
+        autoComplete="userlogin"
+        sx={{ marginTop: '1em' }}
+        {...register('login', { required: 'loginFieldRequiredError' })}
+        error={!!errors.login}
+        helperText={errors.login ? t(String(errors.login.message)) : t('loginFieldSignInHelpText')}
+      />
+      <TextField
+        label={t('passwordFieldLabel')}
+        className="login-form__field-input"
+        type="password"
+        autoComplete="current-password"
+        sx={{ marginTop: '1em' }}
+        {...register('password', { required: 'passwordFieldRequiredError' })}
+        error={!!errors.password}
+        helperText={
+          errors.password ? t(String(errors.password.message)) : t('passwordFieldSignInHelpText')
+        }
+      />
+      <Button type="submit" sx={{ marginTop: '1em' }}>
+        {t('signInFormButtonText')}
+      </Button>
       <ErrorSnackbar messages={serverErrors} />
-    </div>
+    </form>
   );
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../../../hooks/useAppSelector';
 import { useAppDispatch } from '../../../../hooks/useAppDispatch';
 import { signup } from '../../../../store/reducers/login/loginThunks';
-import { TextField, Button } from '@mui/material';
+import { Box, TextField, Button, List, ListItem, ListSubheader } from '@mui/material';
 import ErrorSnackbar from '../../../components/errorSnackbar/errorSnackbar';
 import { clearErrors, clearUserCreated } from '../../../../store/reducers/login/loginSlice';
 import { useForm } from 'react-hook-form';
@@ -51,70 +51,66 @@ export const SignUp = () => {
     return <p>{t('userLoggedIn')}</p>;
   }
 
+  if (loading) {
+    return <Loading isLoading={true} />;
+  }
+
+  if (userCreated) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <List>
+          <ListSubheader>{t('newUserCreated')}</ListSubheader>
+          <ListItem>
+            {t('id')}: {newUser.id}
+          </ListItem>
+          <ListItem>
+            {t('nameFieldLabel')}: {newUser.name}
+          </ListItem>
+          <ListItem>
+            {t('loginFieldLabel')}: {newUser.login}
+          </ListItem>
+        </List>
+      </Box>
+    );
+  }
+
   return (
-    <div className="container">
-      {loading ? (
-        <Loading isLoading={true} />
-      ) : (
-        <div>
-          {!!userCreated ? (
-            <div>
-              <p>New user created</p>
-              <p>Id: {newUser.id}</p>
-              <p>Name: {newUser.name}</p>
-              <p>Login: {newUser.login}</p>
-            </div>
-          ) : (
-            <form className="login-form" onSubmit={handleSubmit(submitForm)}>
-              <div className="login-form__field">
-                <TextField
-                  label={t('nameFieldLabel')}
-                  className="login-form__field-input"
-                  type="text"
-                  sx={{ marginTop: '1em' }}
-                  {...register('name', { required: 'nameFieldRequiredError' })}
-                  error={!!errors.name}
-                  helperText={errors.name ? t(String(errors.name.message)) : t('nameFieldHelpText')}
-                />
-              </div>
-              <div className="login-form__field">
-                <TextField
-                  label={t('loginFieldLabel')}
-                  className="login-form__field-input"
-                  type="text"
-                  autoComplete="userlogin"
-                  sx={{ marginTop: '1em' }}
-                  {...register('login', { required: 'loginFieldRequiredError' })}
-                  error={!!errors.login}
-                  helperText={
-                    errors.login ? t(String(errors.login.message)) : t('loginFieldSignUpHelpText')
-                  }
-                />
-              </div>
-              <div className="login-form__field">
-                <TextField
-                  label={t('passwordFieldLabel')}
-                  className="login-form__field-input"
-                  type="password"
-                  autoComplete="new-password"
-                  sx={{ marginTop: '1em' }}
-                  {...register('password', { required: 'passwordFieldRequiredError' })}
-                  error={!!errors.password}
-                  helperText={
-                    errors.password
-                      ? t(String(errors.password.message))
-                      : t('passwordFieldSignUpHelpText')
-                  }
-                />
-              </div>
-              <Button type="submit" sx={{ marginTop: '1em' }}>
-                {t('signUpFormButtonText')}
-              </Button>
-            </form>
-          )}
-        </div>
-      )}
+    <form className="login-form" onSubmit={handleSubmit(submitForm)}>
+      <TextField
+        label={t('nameFieldLabel')}
+        className="login-form__field-input"
+        type="text"
+        sx={{ marginTop: '1em' }}
+        {...register('name', { required: 'nameFieldRequiredError' })}
+        error={!!errors.name}
+        helperText={errors.name ? t(String(errors.name.message)) : t('nameFieldHelpText')}
+      />
+      <TextField
+        label={t('loginFieldLabel')}
+        className="login-form__field-input"
+        type="text"
+        autoComplete="userlogin"
+        sx={{ marginTop: '1em' }}
+        {...register('login', { required: 'loginFieldRequiredError' })}
+        error={!!errors.login}
+        helperText={errors.login ? t(String(errors.login.message)) : t('loginFieldSignUpHelpText')}
+      />
+      <TextField
+        label={t('passwordFieldLabel')}
+        className="login-form__field-input"
+        type="password"
+        autoComplete="new-password"
+        sx={{ marginTop: '1em' }}
+        {...register('password', { required: 'passwordFieldRequiredError' })}
+        error={!!errors.password}
+        helperText={
+          errors.password ? t(String(errors.password.message)) : t('passwordFieldSignUpHelpText')
+        }
+      />
+      <Button type="submit" sx={{ marginTop: '1em' }}>
+        {t('signUpFormButtonText')}
+      </Button>
       <ErrorSnackbar messages={serverErrors} />
-    </div>
+    </form>
   );
 };

@@ -46,6 +46,8 @@
   "openProject": "Open project",
   "confirmDeleteProject": "Are you sure you want to delete the project?",
   "gotoMainPage": "Go to Main Page",
+  "newUserCreated": "New user created",
+  "id": "ID",
   "createColumnTypography": "Add new column",
   "columnTitle": "Column title",
   "createTaskTypography": "Add new task",
