@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   EDIT_PROFILE,
-  DELETE_PROFILE,
-  DEL_PROFILE_TEXT,
   LOG_OUT,
   LOG_OUT_TEXT,
   navLinkTitle,
@@ -82,9 +80,6 @@ export const Header = () => {
 
   const confirmAction = () => {
     switch (infoDialog) {
-      case DEL_PROFILE_TEXT:
-        deleteProfile();
-        break;
       case LOG_OUT_TEXT:
         signOut();
         break;
@@ -98,10 +93,6 @@ export const Header = () => {
       case EDIT_PROFILE:
         navigate(editProfilePath);
         break;
-      case DELETE_PROFILE:
-        setInfoDialog(DEL_PROFILE_TEXT);
-        dispatch(setDialogActivity(true));
-        break;
       case LOG_OUT:
         setInfoDialog(LOG_OUT_TEXT);
         dispatch(setDialogActivity(true));
@@ -113,8 +104,6 @@ export const Header = () => {
     }
     handleCloseUserMenu();
   };
-
-  const deleteProfile = () => {};
 
   const signOut = () => {
     localStorage.removeItem(USER_DATA_KEY);
