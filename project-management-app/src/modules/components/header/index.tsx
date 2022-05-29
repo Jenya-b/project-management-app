@@ -12,17 +12,14 @@ import {
 } from '../../constants/constHeader';
 import { pathToPage } from '../../constants/constRoutes';
 import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
 import {
   AppBar,
   Avatar,
   Box,
   FormLabel,
   IconButton,
-  InputBase,
   Menu,
   MenuItem,
-  TextField,
   Toolbar,
   Tooltip,
   Typography,
@@ -36,24 +33,23 @@ import { ConfirmationDialog } from '../confirmationDialog';
 import { confirmationDialogSlice } from '../../../store/reducers/confirmationDialogSlice';
 import { useAppSelector } from '../../../hooks/useAppSelector';
 import { BasicModal } from '../modal';
-import { createProject, fetchProjects } from '../../../store/reducers/projects/projectsThunks';
 import { logout } from '../../../store/reducers/login/loginSlice';
 import { USER_DATA_KEY, TOKEN_KEY } from '../../constants/constLocalStorage';
+import { NewProjectModal } from './newProjectModal';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(true);
+  const { language } = useAppSelector((state) => state.langInterfaceReducer);
+  const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(language === 'en');
   const [infoDialog, setInfoDialog] = useState<string>('');
-  const [newProjectTitle, setNewProjectTitle] = useState<string>('');
-  const [newProjectDesc, setNewProjectDesc] = useState<string>('');
   const dispatch = useAppDispatch();
   const { isModalActive } = useAppSelector((state) => state.confirmationDialog);
   const { setLanguage } = langInterfaceSlice.actions;
   const { setDialogActivity } = confirmationDialogSlice.actions;
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { homePath, editProfilePath } = pathToPage;
+  const { editProfilePath } = pathToPage;
 
   useEffect(() => {
     dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
@@ -70,16 +66,6 @@ export const Header = () => {
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleProjectTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setNewProjectTitle(value);
-  };
-
-  const handleProjectDescChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setNewProjectDesc(value);
   };
 
   const handleCloseNavMenu = () => {
@@ -101,9 +87,6 @@ export const Header = () => {
         break;
       case LOG_OUT_TEXT:
         signOut();
-        break;
-      case NEW_PROJECT:
-        addNewProject();
         break;
     }
     closeConfirmationDialog();
@@ -137,18 +120,6 @@ export const Header = () => {
     localStorage.removeItem(USER_DATA_KEY);
     localStorage.removeItem(TOKEN_KEY);
     dispatch(logout());
-  };
-
-  const getProjects = async () => {
-    dispatch(fetchProjects());
-  };
-
-  const addNewProject = async () => {
-    dispatch(
-      createProject({ projectData: { title: newProjectTitle, description: newProjectDesc } })
-    ).then(() => getProjects());
-
-    navigate(homePath);
   };
 
   return (
@@ -225,23 +196,6 @@ export const Header = () => {
                 <AddIcon />
               </IconButton>
             </Tooltip>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                border: 'solid black 1px',
-                borderRadius: '20px',
-              }}
-            >
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder={t('search')}
-                inputProps={{ 'aria-label': 'search' }}
-              />
-              <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
-                <SearchIcon />
-              </IconButton>
-            </Box>
             <FormLabel id="language-switcher">
               <input
                 type="checkbox"
@@ -310,35 +264,21 @@ export const Header = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      <BasicModal
-        isActive={isModalActive}
-        closeWindow={closeConfirmationDialog}
-        confirmAction={confirmAction}
-      >
-        {infoDialog === NEW_PROJECT ? (
-          <>
-            <Typography variant="h6" component="h2">
-              {t('newProjectTypography')}
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <TextField
-                placeholder={t('projectName')}
-                sx={{ marginBottom: 4, marginTop: 4 }}
-                value={newProjectTitle}
-                onChange={handleProjectTitleChange}
-              />
-              <TextField
-                placeholder={t('projectDesc')}
-                sx={{ marginBottom: 4 }}
-                value={newProjectDesc}
-                onChange={handleProjectDescChange}
-              />
-            </Box>
-          </>
-        ) : (
+      {infoDialog === NEW_PROJECT ? (
+        <NewProjectModal
+          isModalActive={isModalActive}
+          closeConfirmationDialog={closeConfirmationDialog}
+          confirmAction={confirmAction}
+        />
+      ) : (
+        <BasicModal
+          isActive={isModalActive}
+          closeWindow={closeConfirmationDialog}
+          confirmAction={confirmAction}
+        >
           <ConfirmationDialog title="titleModal" desc={infoDialog} />
-        )}
-      </BasicModal>
+        </BasicModal>
+      )}
     </>
   );
 };

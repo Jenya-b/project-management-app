@@ -1,7 +1,17 @@
-import { Typography, Box, Button, TextField, Alert, Snackbar } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Button,
+  TextField,
+  Alert,
+  Snackbar,
+  Dialog,
+  DialogContent,
+} from '@mui/material';
 import { PrimaryBtn } from '../../components/button/index';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import { useAppDispatch } from '../../../hooks/useAppDispatch';
 import { BasicModal } from '../../components/modal';
 import {
@@ -10,6 +20,7 @@ import {
   setIsModalFormOpen,
   changeColumnOrder,
   changeTaskOrder,
+  setIsTaskShown,
 } from '../../../store/reducers/board/boardSlice';
 import {
   getBoard,
@@ -22,9 +33,9 @@ import {
   updateColumnOrder,
 } from '../../../store/reducers/board/boardThunks';
 import { useAppSelector } from '../../../hooks/useAppSelector';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Column } from '../../components/column';
-import { BACKGROUND_COLOR } from '../../constants/constGlobal';
+import { BACKGROUND_COLOR, TEXT_FIELD_WIDTH } from '../../constants/constGlobal';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { ConfirmationDialog } from '../../components/confirmationDialog';
 import { useTranslation } from 'react-i18next';
@@ -33,10 +44,18 @@ import { Header } from '../../components/header';
 
 export const Board = () => {
   const dispatch = useAppDispatch();
-  const { t, i18n } = useTranslation();
-  const { board, error, modalAction, taskData, columnData, isModalFormOpen } = useAppSelector(
-    (state) => state.boardReducer
-  );
+  const { t } = useTranslation();
+  const [isFullscreen, setisFullscreen] = useState<boolean>(document.fullscreen);
+  const {
+    board,
+    error,
+    modalAction,
+    taskData,
+    columnData,
+    isModalFormOpen,
+    isTaskShown,
+    dropResult,
+  } = useAppSelector((state) => state.boardReducer);
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
   const { currentUser: user } = useAppSelector((state) => state.usersReducer);
   const titleInput: React.RefObject<HTMLInputElement> = React.createRef();
@@ -48,11 +67,44 @@ export const Board = () => {
     dispatch(getBoard());
   }, []);
 
+  useEffect(() => {
+    const result = dropResult;
+    if (result) {
+      if (result.type === 'task') {
+        dispatch(updateTaskOrder(result));
+      }
+      if (result.type === 'column') {
+        dispatch(updateColumnOrder(result));
+      }
+    }
+  }, [dropResult]);
+
+  const onFullscreen = () => {
+    if (!document.fullscreen) {
+      document.documentElement.requestFullscreen();
+      return;
+    }
+    document.exitFullscreen();
+  };
+
+  const fullscreenHandler = () => {
+    if (!document.fullscreen) {
+      setisFullscreen(false);
+      return;
+    }
+    setisFullscreen(true);
+  };
+
+  useEffect(() => {
+    document.addEventListener('fullscreenchange', fullscreenHandler);
+    return () => {
+      document.removeEventListener('fullscreenchange', fullscreenHandler);
+    };
+  }, []);
+
   const closeFormModal = () => {
     dispatch(setIsModalFormOpen(false));
   };
-
-  console.log(user);
 
   const confirmAction = () => {
     const title = titleInput?.current?.value || '';
@@ -102,10 +154,17 @@ export const Board = () => {
       case 'createColumn':
         return (
           <>
-            <Typography variant="h5" component="h3">
-              Column title:
+            <Typography variant="h6" component="h3">
+              {t('createColumnTypography')}
             </Typography>
-            <TextField hiddenLabel variant="filled" inputRef={titleInput} sx={{ mb: '2rem' }} />
+            <Typography sx={{ mt: 2 }} variant="body1" component="p">
+              {t('columnTitle')}
+            </Typography>
+            <TextField
+              placeholder={t('title')}
+              sx={{ mb: 4, mt: 1, width: TEXT_FIELD_WIDTH }}
+              inputRef={titleInput}
+            />
           </>
         );
 
@@ -113,27 +172,31 @@ export const Board = () => {
       case 'updateTask':
         return (
           <>
-            <Typography variant="h5" component="h3">
-              Task title:
+            <Typography variant="h6" component="h3">
+              {t(`${modalAction}Typography`)}
             </Typography>
-            <TextField
-              hiddenLabel
-              variant="filled"
-              defaultValue={taskData?.title}
-              inputRef={titleInput}
-              sx={{ mb: '2rem' }}
-            />
-            <Typography variant="h5" component="h3">
-              Task description:
-            </Typography>
-            <TextField
-              hiddenLabel
-              multiline
-              variant="filled"
-              defaultValue={taskData?.description}
-              inputRef={taskDescription}
-              sx={{ mb: '2rem' }}
-            />
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography sx={{ mt: 2, width: TEXT_FIELD_WIDTH }} variant="body1" component="p">
+                {t('taskTitle')}
+              </Typography>
+              <TextField
+                placeholder={t('title')}
+                defaultValue={taskData?.title}
+                inputRef={titleInput}
+                sx={{ mb: 2, mt: 1 }}
+              />
+              <Typography sx={{ mt: 2 }} variant="body1" component="p">
+                {t('taskDesc')}
+              </Typography>
+              <TextField
+                placeholder={t('description')}
+                multiline
+                rows={5}
+                defaultValue={taskData?.description}
+                inputRef={taskDescription}
+                sx={{ mb: 4, mt: 1, width: TEXT_FIELD_WIDTH }}
+              />
+            </Box>
           </>
         );
       case 'deleteTask':
@@ -153,19 +216,14 @@ export const Board = () => {
     if (!destination) {
       return;
     }
-
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return;
     }
     if (type === 'task') {
       dispatch(changeTaskOrder(result));
-      dispatch(updateTaskOrder(result));
-      return;
     }
     if (type === 'column') {
       dispatch(changeColumnOrder(result));
-      dispatch(updateColumnOrder(result));
-      return;
     }
   };
   return (
@@ -173,18 +231,36 @@ export const Board = () => {
       <Header />
       <Box sx={{ backgroundColor: BACKGROUND_COLOR, height: 'calc(100vh - 10.5rem)' }}>
         <Box sx={{ mx: '2.3rem' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', my: '1.5rem' }}>
-            <Typography variant="h3" component="h1">
-              Project Board
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              my: '1.5rem',
+              alignItems: 'center',
+            }}
+          >
+            <Typography sx={{ fontSize: '2.5rem' }} component="h1">
+              {t('boardPageTitle')}
             </Typography>
-            <PrimaryBtn text="add column" variant="contained" onClick={onClick}></PrimaryBtn>
+            <Box sx={{ height: '3rem', display: 'flex' }}>
+              <PrimaryBtn
+                text={t('addColumnButton')}
+                variant="contained"
+                onClick={onClick}
+              ></PrimaryBtn>
+            </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', columnGap: '1rem' }}>
-            <Button variant="outlined" startIcon={<FullscreenIcon />}>
-              Fullscreen
+            <Button
+              sx={{ visibility: { xs: 'hidden', md: 'visible' } }}
+              variant="outlined"
+              onClick={onFullscreen}
+              startIcon={isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+            >
+              {t('fullscreen')}
             </Button>
             <Button variant="outlined" onClick={goBack} startIcon={<ExitToAppIcon />}>
-              go back
+              {t('goBack')}
             </Button>
           </Box>
         </Box>
@@ -222,6 +298,16 @@ export const Board = () => {
         >
           {getModalContent()}
         </BasicModal>
+        <Dialog onClose={() => dispatch(setIsTaskShown(false))} open={isTaskShown}>
+          <DialogContent sx={{ px: 10, py: 4, maxHeight: '20rem' }}>
+            <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
+              {taskData?.title}
+            </Typography>
+            <Typography variant="body1" component="p">
+              {taskData?.description}
+            </Typography>
+          </DialogContent>
+        </Dialog>
         <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={clearError}>
           <Alert onClose={clearError} severity="error" sx={{ width: '100%' }}>
             {error}
