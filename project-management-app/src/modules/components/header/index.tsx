@@ -36,10 +36,12 @@ import { BasicModal } from '../modal';
 import { logout } from '../../../store/reducers/login/loginSlice';
 import { USER_DATA_KEY, TOKEN_KEY } from '../../constants/constLocalStorage';
 import { NewProjectModal } from './newProjectModal';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 
 export const Header = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [color, setColor] = useState<string>('#ffffff');
   const { language } = useAppSelector((state) => state.langInterfaceReducer);
   const [isEnglishLanguage, setIsEnglishLanguage] = useState<boolean>(language === 'en');
   const [infoDialog, setInfoDialog] = useState<string>('');
@@ -55,6 +57,12 @@ export const Header = () => {
     dispatch(setLanguage(isEnglishLanguage ? 'en' : 'ru'));
     i18n.changeLanguage(isEnglishLanguage ? 'en' : 'ru');
   }, [dispatch, i18n, isEnglishLanguage, setLanguage]);
+
+  const trigger = useScrollTrigger();
+
+  useEffect(() => {
+    getRandomColor();
+  }, [trigger]);
 
   const handleLanguageChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { checked } = event.currentTarget;
@@ -122,6 +130,15 @@ export const Header = () => {
     dispatch(logout());
   };
 
+  const getRandomColor = () => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    const rgba = `rgba(${r},${g},${b}, .1)`;
+    setColor(rgba);
+    return rgba;
+  };
+
   return (
     <>
       <AppBar
@@ -131,138 +148,158 @@ export const Header = () => {
           backgroundColor: '#ffffff',
           boxShadow: 'unset',
           borderBottom: 'solid 2px rgba(0, 0, 0, .1)',
+          height: '5.2rem',
         }}
       >
-        <Toolbar disableGutters sx={{ mx: 4, justifyContent: 'space-between' }}>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="navigation"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ mt: '8px', display: { xs: 'block', md: 'none' } }}
+        <Box
+          sx={{
+            backgroundColor: trigger ? color : '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            transition: '.3s',
+            height: '5.2rem',
+          }}
+        >
+          <Toolbar disableGutters sx={{ mx: 4, justifyContent: 'space-between', width: '100%' }}>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="navigation"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="default"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{ mt: '12px', display: { xs: 'block', md: 'none' } }}
+              >
+                {navLinkTitle.map((title) => (
+                  <NavLink key={title} to={pathToPage[`${title.slice(0, -2)}th`]}>
+                    <MenuItem
+                      onClick={handleCloseNavMenu}
+                      sx={{
+                        border: 'solid 2px rgba(0, 0, 0, .1)',
+                        borderTop: 'none',
+                        backgroundColor: trigger ? color : '#ffffff',
+                      }}
+                    >
+                      <Typography textAlign="center">{t(title)}</Typography>
+                    </MenuItem>
+                  </NavLink>
+                ))}
+              </Menu>
+            </Box>
+
+            <Box
+              sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}
             >
               {navLinkTitle.map((title) => (
-                <NavLink key={title} to={pathToPage[`${title.slice(0, -2)}th`]}>
-                  <MenuItem
-                    onClick={handleCloseNavMenu}
-                    sx={{ border: 'solid 2px rgba(0, 0, 0, .1)', borderTop: 'none' }}
-                  >
-                    <Typography textAlign="center">{t(title)}</Typography>
-                  </MenuItem>
+                <NavLink
+                  key={title}
+                  to={pathToPage[`${title.slice(0, -2)}th`]}
+                  className="header__link"
+                  onClick={handleCloseNavMenu}
+                >
+                  {t(title)}
                 </NavLink>
               ))}
-            </Menu>
-          </Box>
-
-          <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
-            {navLinkTitle.map((title) => (
-              <NavLink
-                key={title}
-                to={pathToPage[`${title.slice(0, -2)}th`]}
-                className="header__link"
-                onClick={handleCloseNavMenu}
-              >
-                {t(title)}
-              </NavLink>
-            ))}
-          </Box>
-          <Box sx={{ display: 'flex', columnGap: '1.5rem' }}>
-            <Tooltip title={t('createNewBoardHelperText')}>
-              <IconButton
-                onClick={() => clickMenuItem(NEW_PROJECT)}
-                size="large"
-                aria-label="create new board"
-              >
-                <AddIcon />
-              </IconButton>
-            </Tooltip>
-            <FormLabel id="language-switcher">
-              <input
-                type="checkbox"
-                className="language-switcher__checkbox"
-                checked={isEnglishLanguage}
-                onChange={handleLanguageChange}
-              />
-
-              <span id="round-slider"></span>
-              <span id="select-ru">RU</span>
-              <span id="select-en">EN</span>
-            </FormLabel>
-            <IconButton
-              onClick={handleOpenUserMenu}
-              sx={{
-                p: 0,
-              }}
-            >
-              <Avatar
-                alt="Remy Sharp"
-                src="/static/images/avatar/2.jpg"
-                sx={{
-                  overflow: 'visible',
-                  '&:before': {
-                    content: '"❯"',
-                    color: '#ffffff',
-                    position: 'absolute',
-                    backgroundColor: '#3026b9',
-                    borderRadius: '50%',
-                    height: '1em',
-                    top: '2.6em',
-                    left: '0',
-                    mt: '-1em',
-                    transform: 'rotate(90deg)',
-                    width: '1em',
-                  },
-                }}
-              />
-            </IconButton>
-            <Menu
-              sx={{ mt: { xs: '48px', md: '55px' } }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settingsProfile.map((setting) => (
-                <MenuItem
-                  key={setting}
-                  onClick={() => clickMenuItem(setting)}
-                  sx={{ border: 'solid 2px rgba(0, 0, 0, .1)', borderTop: 'none' }}
+            </Box>
+            <Box sx={{ display: 'flex', columnGap: '1.5rem' }}>
+              <Tooltip title={t('createNewBoardHelperText')}>
+                <IconButton
+                  onClick={() => clickMenuItem(NEW_PROJECT)}
+                  size="large"
+                  aria-label="create new board"
                 >
-                  <Typography textAlign="center">{t(setting)}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        </Toolbar>
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
+              <FormLabel id="language-switcher">
+                <input
+                  type="checkbox"
+                  className="language-switcher__checkbox"
+                  checked={isEnglishLanguage}
+                  onChange={handleLanguageChange}
+                />
+
+                <span id="round-slider"></span>
+                <span id="select-ru">RU</span>
+                <span id="select-en">EN</span>
+              </FormLabel>
+              <IconButton
+                onClick={handleOpenUserMenu}
+                sx={{
+                  p: 0,
+                }}
+              >
+                <Avatar
+                  src="/static/images/avatar.jpg"
+                  sx={{
+                    overflow: 'visible',
+                    '&:before': {
+                      content: '"❯"',
+                      color: '#ffffff',
+                      position: 'absolute',
+                      backgroundColor: '#3026b9',
+                      borderRadius: '50%',
+                      height: '1em',
+                      top: '2.6em',
+                      left: '0',
+                      mt: '-1em',
+                      transform: 'rotate(90deg)',
+                      width: '1em',
+                    },
+                  }}
+                />
+              </IconButton>
+              <Menu
+                sx={{ mt: '55px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settingsProfile.map((setting) => (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => clickMenuItem(setting)}
+                    sx={{
+                      border: 'solid 2px rgba(0, 0, 0, .1)',
+                      borderTop: 'none',
+                      backgroundColor: trigger ? color : '#ffffff',
+                    }}
+                  >
+                    <Typography textAlign="center">{t(setting)}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Box>
       </AppBar>
       {infoDialog === NEW_PROJECT ? (
         <NewProjectModal

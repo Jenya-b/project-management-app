@@ -28,7 +28,7 @@ export const commandSlideData = [
     address: 'piter',
   },
   {
-    img: 'https://avatars.githubusercontent.com/u/87133349?v=4',
+    img: 'assets/images/photo.jpg',
     developer: 'kardash',
     address: 'moscow',
   },
