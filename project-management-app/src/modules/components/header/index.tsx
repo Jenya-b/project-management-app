@@ -99,7 +99,7 @@ export const Header = () => {
   const clickMenuItem = (item: string) => {
     switch (item) {
       case EDIT_PROFILE:
-        navigate(editProfilePath);
+        navigate(`/${editProfilePath}`);
         break;
       case LOG_OUT:
         setInfoDialog(LOG_OUT_TEXT);
