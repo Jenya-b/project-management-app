@@ -5,17 +5,20 @@
   position: relative;
   height: 100%;
 
+  @media (max-width: 1250px) {
+    background: #d4d4d4;
+  }
+
   .swiper-info {
     position: absolute;
     height: 100%;
     width: 50%;
-    font-size: 8em;
     z-index: 10;
-    @media (max-width: 1200px) {
-      font-size: 5em;
+    @media (max-width: 1500px) {
+      width: 60%;
     }
-    @media (max-width: 700px) {
-      font-size: 3em;
+    @media (max-width: 1250px) {
+      width: 100%;
     }
   }
 
@@ -26,6 +29,10 @@
     z-index: 10;
     right: 13rem;
     top: 2.3rem;
+    @media (max-width: 600px) {
+      right: 50%;
+      transform: translate(50%);
+    }
   }
 
   .title {
@@ -45,6 +52,10 @@
 
   .swiper-image {
     width: 100%;
+
+    @media (max-width: 1250px) {
+      display: none;
+    }
   }
 
   .swiper-slide {
@@ -58,6 +69,15 @@
     padding-left: 5em;
     padding-right: 6em;
     font-size: 20px;
+    @media (max-width: 1250px) {
+      padding: 0 4rem;
+    }
+    @media (max-width: 800px) {
+      padding: 0 2rem;
+    }
+    @media (max-width: 450px) {
+      padding: 0 1rem;
+    }
   }
 
   .swiper-slide img {
