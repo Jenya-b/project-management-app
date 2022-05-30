@@ -20,6 +20,7 @@ import { BasicModal } from '../../components/modal';
 import { ConfirmationDialog } from '../../components/confirmationDialog';
 import { Header } from '../../components/header';
 import { pathToPage } from '../../constants/constRoutes';
+import { setIsLoading } from '../../../store/reducers/board/boardSlice';
 
 export const Main = () => {
   const { t } = useTranslation();
@@ -54,6 +55,7 @@ export const Main = () => {
   const handleClickList = (id: string) => {
     getProjectDescription(id);
     if (window.innerWidth < 900) {
+      dispatch(setIsLoading(true));
       navigate(boardPath);
     }
   };
@@ -64,6 +66,7 @@ export const Main = () => {
   };
 
   const openBoard = () => {
+    dispatch(setIsLoading(true));
     navigate(boardPath);
   };
 

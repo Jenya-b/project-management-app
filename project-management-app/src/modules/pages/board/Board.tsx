@@ -7,6 +7,8 @@ import {
   Snackbar,
   Dialog,
   DialogContent,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material';
 import { PrimaryBtn } from '../../components/button/index';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -41,11 +43,16 @@ import { ConfirmationDialog } from '../../components/confirmationDialog';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../../components/header';
+import { Loading } from '../../components/loading';
+import { UserData } from '../../../utils/api/users/usersTypes';
+import { TaskType } from '../../types';
 
 export const Board = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [isFullscreen, setisFullscreen] = useState<boolean>(document.fullscreen);
+  const [titleError, setTitleError] = useState<boolean>(false);
+  const [descriptionError, setDescriptionError] = useState<boolean>(false);
   const {
     board,
     error,
@@ -55,11 +62,13 @@ export const Board = () => {
     isModalFormOpen,
     isTaskShown,
     dropResult,
+    isLoading,
   } = useAppSelector((state) => state.boardReducer);
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
   const { currentUser: user } = useAppSelector((state) => state.usersReducer);
   const titleInput: React.RefObject<HTMLInputElement> = React.createRef();
   const taskDescription: React.RefObject<HTMLInputElement> = React.createRef();
+  const assignMyself: React.RefObject<HTMLInputElement> = React.createRef();
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
@@ -103,7 +112,13 @@ export const Board = () => {
   }, []);
 
   const closeFormModal = () => {
+    setTitleError(false);
+    setDescriptionError(false);
     dispatch(setIsModalFormOpen(false));
+  };
+
+  const getDate = () => {
+    return new Date().toLocaleString();
   };
 
   const confirmAction = () => {
@@ -112,24 +127,76 @@ export const Board = () => {
     const columnId = taskData?.columnId || '';
     const order = taskData?.order || 0;
     const taskId = taskData?.id || '';
-
+    console.log(assignMyself.current?.checked);
     switch (modalAction) {
       case 'createColumn': {
+        if (!title) {
+          setTitleError(true);
+          break;
+        }
         dispatch(createColumn({ title })).then(() => closeFormModal());
         break;
       }
       case 'createTask': {
-        dispatch(createTask({ columnId, taskData: { title, description, userId: user.id } })).then(
-          () => closeFormModal()
-        );
+        if (!title || !description) {
+          if (!title) setTitleError(true);
+          if (!description) setDescriptionError(true);
+          break;
+        }
+        const desc = {
+          description,
+          creationDate: getDate(),
+          lastModified: getDate(),
+          authorId: user.id,
+          authorName: user.name,
+          assignees: [] as Array<UserData>,
+        };
+        if (assignMyself?.current?.checked) {
+          desc.assignees.push(user);
+        }
+        dispatch(
+          createTask({
+            columnId,
+            taskData: { title, description: JSON.stringify(desc), userId: user.id },
+          })
+        ).then(() => closeFormModal());
         break;
       }
       case 'updateTask': {
+        if (!title || !description) {
+          if (!title) setTitleError(true);
+          if (!description) setDescriptionError(true);
+          break;
+        }
+        let desc;
+        if (taskData?.description) {
+          desc = { ...taskData.description };
+          desc.assignees = [...taskData.description.assignees];
+          desc.description = description;
+          desc.lastModified = getDate();
+          const index = desc.assignees.findIndex((assignee) => assignee.id === user.id);
+          if (!assignMyself?.current?.checked) {
+            if (index >= 0) {
+              desc.assignees.splice(index, 1);
+            }
+          } else {
+            if (index < 0) {
+              desc.assignees.push(user);
+            }
+          }
+        }
         dispatch(
           updateTask({
             columnId,
             taskId,
-            taskData: { title, order, description, userId: user.id, boardId: projectId, columnId },
+            taskData: {
+              title,
+              order,
+              description: JSON.stringify(desc),
+              userId: user.id,
+              boardId: projectId,
+              columnId,
+            },
           })
         ).then(() => closeFormModal());
         break;
@@ -164,6 +231,9 @@ export const Board = () => {
               placeholder={t('title')}
               sx={{ mb: 4, mt: 1, width: TEXT_FIELD_WIDTH }}
               inputRef={titleInput}
+              error={titleError}
+              helperText={titleError ? t('titleErrorText') : ''}
+              onFocus={() => setTitleError(false)}
             />
           </>
         );
@@ -176,14 +246,17 @@ export const Board = () => {
               {t(`${modalAction}Typography`)}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography sx={{ mt: 2, width: TEXT_FIELD_WIDTH }} variant="body1" component="p">
+              <Typography sx={{ mt: 2 }} variant="body1" component="p">
                 {t('taskTitle')}
               </Typography>
               <TextField
                 placeholder={t('title')}
                 defaultValue={taskData?.title}
                 inputRef={titleInput}
-                sx={{ mb: 2, mt: 1 }}
+                sx={{ mb: 2, mt: 1, width: TEXT_FIELD_WIDTH }}
+                error={titleError}
+                helperText={titleError ? t('titleErrorText') : ''}
+                onFocus={() => setTitleError(false)}
               />
               <Typography sx={{ mt: 2 }} variant="body1" component="p">
                 {t('taskDesc')}
@@ -192,9 +265,16 @@ export const Board = () => {
                 placeholder={t('description')}
                 multiline
                 rows={5}
-                defaultValue={taskData?.description}
+                defaultValue={taskData?.description.description}
                 inputRef={taskDescription}
                 sx={{ mb: 4, mt: 1, width: TEXT_FIELD_WIDTH }}
+                error={descriptionError}
+                helperText={descriptionError ? t('descriptionErrorText') : ''}
+                onFocus={() => setDescriptionError(false)}
+              />
+              <FormControlLabel
+                control={<Checkbox defaultChecked inputRef={assignMyself} />}
+                label={t('assignMyself')}
               />
             </Box>
           </>
@@ -264,33 +344,37 @@ export const Board = () => {
             </Button>
           </Box>
         </Box>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Box sx={{ overflowX: 'auto', m: '2.3rem', mb: '0' }}>
-            <Droppable droppableId="allColumns" direction="horizontal" type="column">
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    minWidth: 'min-content',
-                  }}
-                >
-                  {board.columns.map((column) => (
-                    <Column
-                      key={column.id}
-                      id={column.id}
-                      title={column.title}
-                      order={column.order}
-                      tasks={column.tasks}
-                    ></Column>
-                  ))}
-                </div>
-              )}
-            </Droppable>
-          </Box>
-        </DragDropContext>
+        {isLoading ? (
+          <Loading isLoading={true} />
+        ) : (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Box sx={{ overflowX: 'auto', m: '2.3rem', mb: '0' }}>
+              <Droppable droppableId="allColumns" direction="horizontal" type="column">
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      minWidth: 'min-content',
+                    }}
+                  >
+                    {board.columns.map((column) => (
+                      <Column
+                        key={column.id}
+                        id={column.id}
+                        title={column.title}
+                        order={column.order}
+                        tasks={column.tasks as unknown as TaskType[]}
+                      ></Column>
+                    ))}
+                  </div>
+                )}
+              </Droppable>
+            </Box>
+          </DragDropContext>
+        )}
         <BasicModal
           isActive={isModalFormOpen}
           closeWindow={closeFormModal}
@@ -304,7 +388,14 @@ export const Board = () => {
               {taskData?.title}
             </Typography>
             <Typography variant="body1" component="p">
-              {taskData?.description}
+              {taskData?.description?.description} <br />
+              {t('author')}: {taskData?.description?.authorName} <br />
+              {t('created')}: {taskData?.description?.creationDate} <br />
+              {t('lastModified')}: {taskData?.description?.lastModified} <br />
+            </Typography>
+            <Typography variant="body1" component="p">
+              {t('assignee')}:{' '}
+              {taskData?.description?.assignees.map((assignee) => `${assignee.name} `)}
             </Typography>
           </DialogContent>
         </Dialog>
