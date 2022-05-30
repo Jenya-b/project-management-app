@@ -58,7 +58,14 @@ export const Column = ({ id, title, order, tasks }: ColumnProps) => {
     dispatch(
       setTaskData({
         title: '',
-        description: '',
+        description: {
+          description: '',
+          creationDate: '',
+          lastModified: '',
+          authorId: '',
+          authorName: '',
+          assignees: [],
+        },
         order: tasks.length,
         columnId: id,
         boardId: projectId,

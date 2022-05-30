@@ -276,7 +276,7 @@ export const updateTaskOrder = createAsyncThunk<
     const res = await Task.update(token, boardId, prevColumnId, taskId, {
       title: task?.title || '',
       order: order + 1,
-      description: task?.description || '',
+      description: JSON.stringify(task?.description),
       userId: task?.userId || '',
       boardId,
       columnId,

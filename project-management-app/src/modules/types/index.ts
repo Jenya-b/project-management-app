@@ -1,4 +1,5 @@
 import { rootReducer, setupStore } from '../../store/store';
+import { UserData } from '../../utils/api/users/usersTypes';
 
 export type RootStateType = ReturnType<typeof rootReducer>;
 
@@ -69,7 +70,14 @@ export type TaskType = {
   id: string;
   title: string;
   order: number;
-  description: string;
+  description: {
+    description: string;
+    creationDate: string;
+    lastModified: string;
+    authorId: string;
+    authorName: string;
+    assignees: Array<UserData>;
+  };
   userId: string;
   boardId: string;
   columnId: string;

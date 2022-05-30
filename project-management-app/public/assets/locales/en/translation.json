@@ -73,5 +73,12 @@
   "kardash": "Milana Kardash, Developer",
   "minsk": "Belarus, Minsk",
   "moscow": "Russia, Moscow",
-  "piter": "Russia, Saint Petersburg"
+  "piter": "Russia, Saint Petersburg",
+  "assignMyself": "Assign myself",
+  "titleErrorText": "Title is required!",
+  "descriptionErrorText": "Description is required!",
+  "author": "Author",
+  "created": "Created",
+  "lastModified": "Last modified",
+  "assignee": "Assignees"
 }

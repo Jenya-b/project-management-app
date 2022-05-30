@@ -72,6 +72,10 @@ export const boardSlice = createSlice({
       state.modalAction = action.payload;
     },
 
+    setIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
+
     changeTaskOrder(state, action: PayloadAction<DropResult>) {
       const prevColumn = state.board.columns.find(
         (item) => item.id === action.payload.source.droppableId
@@ -117,6 +121,9 @@ export const boardSlice = createSlice({
       state.error = null;
       action.payload.columns.sort((a, b) => a.order - b.order);
       action.payload.columns.forEach((column) => column.tasks.sort((a, b) => a.order - b.order));
+      action.payload.columns.forEach((column) =>
+        column.tasks.forEach((task) => (task.description = JSON.parse(task.description)))
+      );
       state.board = action.payload;
       state.isLoading = false;
     });
@@ -138,8 +145,10 @@ export const boardSlice = createSlice({
       }),
       builder.addCase(createTask.fulfilled, (state, action) => {
         const column = state.board.columns.find((item) => item.id === action.payload.columnId);
+        const task = action.payload as unknown as ITask;
+        task.description = JSON.parse(task.description);
         if (column) {
-          column.tasks.push(action.payload as ITask);
+          column.tasks.push(task);
           state.error = null;
         } else {
           state.error = 'Failed to create new task.';
@@ -211,7 +220,9 @@ export const boardSlice = createSlice({
             const prevOrder = column.tasks[index].order;
             const currentOrder = action.payload.order;
             if (prevOrder === currentOrder) {
-              column.tasks[index] = action.payload as ITask;
+              const task = action.payload as unknown as ITask;
+              task.description = JSON.parse(task.description);
+              column.tasks[index] = task as unknown as ITask;
               return;
             }
           }
@@ -233,5 +244,6 @@ export const {
   changeColumnOrder,
   changeTaskOrder,
   setIsTaskShown,
+  setIsLoading,
 } = boardSlice.actions;
 export default boardSlice.reducer;

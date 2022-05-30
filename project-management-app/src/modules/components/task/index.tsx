@@ -12,12 +12,20 @@ import {
 import { ModalAction } from '../../../modules/types';
 import { Typography, IconButton, Tooltip, Card, CardContent, CardActions } from '@mui/material';
 import { Draggable } from 'react-beautiful-dnd';
+import { UserData } from '../../../utils/api/users/usersTypes';
 
 type TaskProps = {
   id: string;
   title: string;
   order: number;
-  description: string;
+  description: {
+    description: string;
+    creationDate: string;
+    lastModified: string;
+    authorId: string;
+    authorName: string;
+    assignees: Array<UserData>;
+  };
   columnId: string;
   userId: string;
 };
@@ -25,7 +33,6 @@ export const Task = ({ id, title, order, description, columnId, userId }: TaskPr
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { projectId } = useAppSelector((state) => state.projectByIdReducer);
-
   const setData = () => {
     dispatch(
       setTaskData({
@@ -80,7 +87,9 @@ export const Task = ({ id, title, order, description, columnId, userId }: TaskPr
               color="text.secondary"
               sx={{ fontSize: '1.1rem' }}
             >
-              {description.length > 100 ? `${description.slice(0, 100)}...` : description}
+              {description.description.length > 100
+                ? `${description.description.slice(0, 100)}...`
+                : description.description}
             </Typography>
           </CardContent>
           <CardActions disableSpacing sx={{ position: 'absolute', right: '0', top: '0' }}>
