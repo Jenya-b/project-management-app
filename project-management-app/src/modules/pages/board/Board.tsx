@@ -127,7 +127,6 @@ export const Board = () => {
     const columnId = taskData?.columnId || '';
     const order = taskData?.order || 0;
     const taskId = taskData?.id || '';
-    console.log(assignMyself.current?.checked);
     switch (modalAction) {
       case 'createColumn': {
         if (!title) {
