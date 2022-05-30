@@ -64,7 +64,7 @@ export const Main = () => {
   };
 
   const openBoard = () => {
-    navigate('/board');
+    navigate(boardPath);
   };
 
   const deleteBoard = async (id: string) => {

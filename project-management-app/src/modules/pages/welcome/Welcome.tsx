@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/pagination';
-import { Autoplay, Pagination, EffectFade } from 'swiper';
+import { Autoplay, EffectFade, Mousewheel, Keyboard } from 'swiper';
 import './index.scss';
 import { PrimaryBtn } from '../../components/button/index';
 import { buttonDescription, backgroundImages } from '../../constants/constMain';
@@ -31,7 +31,11 @@ export const Welcome = () => {
           pauseOnMouseEnter: true,
         }}
         speed={3500}
-        modules={[Autoplay, EffectFade]}
+        keyboard={{
+          enabled: true,
+        }}
+        mousewheel={true}
+        modules={[Autoplay, EffectFade, Mousewheel, Keyboard]}
       >
         {slideWrapper.map((slide) => (
           <SwiperSlide className="swiper-slide-desc" key={v4()}>
@@ -63,10 +67,7 @@ export const Welcome = () => {
           delay: 4000,
           disableOnInteraction: false,
         }}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[Autoplay, Pagination, EffectFade]}
+        modules={[Autoplay, EffectFade]}
       >
         {backgroundImages.map((image) => (
           <SwiperSlide key={image}>
