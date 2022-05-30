@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../../../utils/settings';
 import { Task } from '../../../utils/api/tasks/tasks';
 import { Column, Board } from '../../../utils/api/columns/columns';

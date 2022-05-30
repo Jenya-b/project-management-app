@@ -56,7 +56,7 @@ export const Main = () => {
     getProjectDescription(id);
     if (window.innerWidth < 900) {
       dispatch(setIsLoading(true));
-      navigate(boardPath);
+      navigate(`/${boardPath}`);
     }
   };
 
@@ -67,7 +67,7 @@ export const Main = () => {
 
   const openBoard = () => {
     dispatch(setIsLoading(true));
-    navigate(boardPath);
+    navigate(`/${boardPath}`);
   };
 
   const deleteBoard = async (id: string) => {
