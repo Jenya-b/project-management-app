@@ -6,6 +6,7 @@
 - TypeScript;
 - React;
 - Redux;
+- Material UI;
 - SASS
 
 ## Core skills:
