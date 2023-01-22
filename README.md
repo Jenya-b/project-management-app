@@ -5,6 +5,7 @@
 ## Technologies used:
 - TypeScript;
 - React;
+- Redux;
 - SASS
 
 ## Core skills:
