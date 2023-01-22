@@ -1,5 +1,7 @@
 # Educational project "Project management"
 
+## Development branch: develop
+
 ## Technologies used:
 - TypeScript;
 - React;
